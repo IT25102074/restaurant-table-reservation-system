@@ -1,279 +1,245 @@
-[//]: # (# 🤝 Contributing Guide — How to Work on This Project)
+# 🤝 Contributing Guide — How to Work on This Project
 
-[//]: # ()
-[//]: # (Read this carefully before writing any code.)
+Please read this guide carefully before contributing to the project.
 
-[//]: # ()
-[//]: # (---)
+---
 
-[//]: # ()
-[//]: # (## ✅ Step 1 — First Time Setup)
+# ✅ Step 1 — First Time Setup
 
-[//]: # ()
-[//]: # (### Clone the repo)
+## Clone the Repository
 
-[//]: # (git clone https://github.com/IT25102074/restaurant-table-reservation-system.git)
+```bash
+git clone https://github.com/IT25102074/restaurant-table-reservation-system.git
+cd restaurant-table-reservation-system
+```
 
-[//]: # (cd restaurant-table-reservation-system)
+## Switch to Develop Branch
 
-[//]: # ()
-[//]: # (### Switch to develop branch)
+```bash
+git checkout develop
+git pull origin develop
+```
 
-[//]: # (git checkout develop)
+## Open in IntelliJ IDEA
 
-[//]: # (git pull origin develop)
+1. Open IntelliJ IDEA
+2. Click **File → Open**
+3. Select the project folder
 
-[//]: # ()
-[//]: # (### Open in IntelliJ IDEA)
+Wait for **Maven to download all dependencies**.
 
-[//]: # (File → Open → select the project folder)
+---
 
-[//]: # (Wait for Maven to download all dependencies)
+## Setup Your Database
 
-[//]: # ()
-[//]: # (### Setup your database)
+1. Open **MySQL Workbench**
+2. Run the following command:
 
-[//]: # (1. Open MySQL Workbench)
+```sql
+CREATE DATABASE restaurant_db;
+```
 
-[//]: # (2. Run: CREATE DATABASE restaurant_db;)
+3. Open:
 
-[//]: # (3. Open application.properties)
+```
+src/main/resources/application.properties
+```
 
-[//]: # (4. Change password to your MySQL password)
+4. Change the database password to **your MySQL password**.
 
-[//]: # ()
-[//]: # (### Run the project)
+---
 
-[//]: # (Click Run in IntelliJ)
+## Run the Project
 
-[//]: # (Open browser: http://localhost:8080)
+Click **Run** in IntelliJ.
 
-[//]: # ()
-[//]: # (---)
+Then open your browser:
 
-[//]: # ()
-[//]: # (## ✅ Step 2 — Your Files to Work On)
+```
+http://localhost:8080
+```
 
-[//]: # ()
-[//]: # (### Developer 1 — User Management)
+---
 
-[//]: # (Files YOU are responsible for:)
+# ✅ Step 2 — Your Files to Work On
 
-[//]: # (- model/User.java)
+## Developer 1 — User Management
 
-[//]: # (- model/Customer.java)
+Files responsible for:
 
-[//]: # (- model/Admin.java)
+- model/User.java
+- model/Customer.java
+- model/Admin.java
+- repository/UserRepository.java
+- service/UserService.java
+- controller/UserController.java
+- templates/register.html
+- templates/login.html
+- templates/profile.html
 
-[//]: # (- repository/UserRepository.java)
+---
 
-[//]: # (- service/UserService.java)
+## Developer 2 — Table Management
 
-[//]: # (- controller/UserController.java)
+Files responsible for:
 
-[//]: # (- templates/register.html)
+- model/RestaurantTable.java
+- repository/TableRepository.java
+- service/TableService.java
+- controller/TableController.java
+- templates/tables.html
+- templates/admin-tables.html
 
-[//]: # (- templates/login.html)
+---
 
-[//]: # (- templates/profile.html)
+## Developer 3 — Reservation Management
 
-[//]: # ()
-[//]: # (### Developer 2 — Table Management)
+Files responsible for:
 
-[//]: # (Files YOU are responsible for:)
+- model/Reservation.java
+- repository/ReservationRepository.java
+- service/ReservationService.java
+- controller/ReservationController.java
+- templates/reservation-form.html
+- templates/my-reservations.html
 
-[//]: # (- model/RestaurantTable.java)
+---
 
-[//]: # (- repository/TableRepository.java)
+## Developer 4 — Notification & Feedback
 
-[//]: # (- service/TableService.java)
+Files responsible for:
 
-[//]: # (- controller/TableController.java)
+- model/Notification.java
+- repository/NotificationRepository.java
+- service/NotificationService.java
+- controller/NotificationController.java
+- templates/notifications.html
+- templates/feedback.html
+- templates/home.html
+- static/css/style.css
 
-[//]: # (- templates/tables.html)
+---
 
-[//]: # (- templates/admin-tables.html)
+## Developer 5 — Admin Dashboard / Auth
 
-[//]: # ()
-[//]: # (### Developer 3 — Reservation Management)
+Files responsible for:
 
-[//]: # (Files YOU are responsible for:)
+- controller/AdminController.java
+- templates/admin-dashboard.html
+- templates/admin-users.html
+- templates/admin-reservations.html
 
-[//]: # (- model/Reservation.java)
+---
 
-[//]: # (- repository/ReservationRepository.java)
+## Developer 6 — Project Setup & Auth / Notifications
 
-[//]: # (- service/ReservationService.java)
+Files responsible for:
 
-[//]: # (- controller/ReservationController.java)
+- ReservationApplication.java
+- application.properties
+- Base model classes
+- Security configuration
 
-[//]: # (- templates/reservation-form.html)
+---
 
-[//]: # (- templates/my-reservations.html)
+# ✅ Step 3 — Daily Workflow
 
-[//]: # ()
-[//]: # (### Developer 4 —  and Feedback)
+## Every day before coding
 
-[//]: # (Files YOU are responsible for:)
+Always pull the latest code first:
 
-[//]: # (- model/Notification.java)
+```bash
+git checkout develop
+git pull origin develop
+```
 
-[//]: # (- repository/NotificationRepository.java)
+---
 
-[//]: # (- service/NotificationService.java)
+## Create your feature branch (only once)
 
-[//]: # (- controller/NotificationController.java)
+Example:
 
-[//]: # (- templates/notifications.html)
+```bash
+git checkout -b feature/user-management
+```
 
-[//]: # (- templates/feedback.html)
+---
 
-[//]: # (- templates/home.html)
+## After writing code
 
-[//]: # (- static/css/style.css)
+Save your work:
 
-[//]: # ()
-[//]: # (### Developer 5 — Admin Dashboard/ Auth)
+```bash
+git add .
+git commit -m "[ADD] User registration logic"
+git push origin feature/user-management
+```
 
-[//]: # (Files YOU are responsible for:)
+---
 
-[//]: # (- controller/AdminController.java)
+## When your feature is ready — Create a Pull Request
 
-[//]: # (- templates/admin-dashboard.html)
+1. Go to **GitHub**
+2. Click **Pull Requests → New Pull Request**
+3. Base branch: `develop`
+4. Compare branch: `feature/user-management`
+5. Title example:
 
-[//]: # (- templates/admin-users.html)
+```
+[FEATURE] User Management Module
+```
 
-[//]: # (- templates/admin-reservations.html)
+6. Describe what you built
+7. Request review from **Lead 1 or Lead 2**
 
-[//]: # ()
-[//]: # (### Developer 6 — Project Setup and Auth ,Notification)
+---
 
-[//]: # (Files YOU are responsible for:)
+# ✅ Step 4 — Commit Message Rules
 
-[//]: # (- ReservationApplication.java)
+Always follow this format:
 
-[//]: # (- application.properties)
+```
+[TYPE] Short description
+```
 
-[//]: # (- All model base classes)
+| Type | When to Use |
+|-----|-------------|
+| INIT | First setup only |
+| ADD | Adding new feature or file |
+| FIX | Bug fix |
+| UPDATE | Changing existing code |
+| DOCS | Documentation updates |
+| REMOVE | Removing unused code |
 
-[//]: # (- Security configuration)
+Examples:
 
-[//]: # ()
-[//]: # (---)
+```
+[ADD] User registration with MySQL
+[FIX] Table availability check bug
+[UPDATE] Reservation form validation
+[DOCS] Update README setup steps
+```
 
-[//]: # ()
-[//]: # (## ✅ Step 3 — Daily Workflow)
+---
 
-[//]: # ()
-[//]: # (### Every day before coding — pull latest code)
+# ✅ Step 5 — Important Rules
 
-[//]: # (git checkout develop)
+1. **Never push directly to `main` or `develop`.**
+2. Always create a **feature branch**.
+3. Always **pull the latest develop branch before coding**.
+4. Do not edit another developer's files without discussion.
+5. Always write **clear commit messages**.
+6. Test your code before creating a **Pull Request**.
+7. Never commit `application.properties` with your real password.
 
-[//]: # (git pull origin develop)
+Before committing, make sure:
 
-[//]: # ()
-[//]: # (### Create your feature branch &#40;only once&#41;)
+```
+spring.datasource.password=your_password
+```
 
-[//]: # (git checkout -b feature/user-management)
+---
 
-[//]: # ()
-[//]: # (### After writing code — save your work)
 
-[//]: # (git add .)
 
-[//]: # (git commit -m "[ADD] User registration logic")
-
-[//]: # (git push origin feature/user-management)
-
-[//]: # ()
-[//]: # (### When your feature is ready — create Pull Request)
-
-[//]: # (1. Go to GitHub)
-
-[//]: # (2. Click Pull Requests → New Pull Request)
-
-[//]: # (3. Base: develop  ←  Compare: feature/user-management)
-
-[//]: # (4. Title: [FEATURE] User Management Module)
-
-[//]: # (5. Describe what you built)
-
-[//]: # (6. Request review from Lead 1 or Lead 2)
-
-[//]: # ()
-[//]: # (---)
-
-[//]: # ()
-[//]: # (## ✅ Step 4 — Commit Message Rules)
-
-[//]: # ()
-[//]: # (Always use this format:)
-
-[//]: # ([TYPE] Short description of what you did)
-
-[//]: # ()
-[//]: # (| Type | When to use |)
-
-[//]: # (|------|------------|)
-
-[//]: # (| [INIT] | First setup only |)
-
-[//]: # (| [ADD] | New feature or file |)
-
-[//]: # (| [FIX] | Bug fix |)
-
-[//]: # (| [UPDATE] | Changing existing code |)
-
-[//]: # (| [DOCS] | README or comments |)
-
-[//]: # (| [REMOVE] | Deleting unused code |)
-
-[//]: # ()
-[//]: # (Examples:)
-
-[//]: # ([ADD] User registration with MySQL)
-
-[//]: # ([FIX] Table availability check bug)
-
-[//]: # ([UPDATE] Reservation form validation)
-
-[//]: # ([DOCS] Update README setup steps)
-
-[//]: # ()
-[//]: # (---)
-
-[//]: # ()
-[//]: # (## ✅ Step 5 — Important Rules)
-
-[//]: # ()
-[//]: # (1. NEVER push directly to main or develop)
-
-[//]: # (2. ALWAYS create a feature branch for your work)
-
-[//]: # (3. ALWAYS pull latest develop before starting)
-
-[//]: # (4. NEVER edit another developer's files)
-
-[//]: # (5. ALWAYS write commit messages clearly)
-
-[//]: # (6. ALWAYS test your code before creating PR)
-
-[//]: # (7. NEVER commit application.properties with your password)
-
-[//]: # (   → change password back to: your_password before committing)
-
-[//]: # ()
-[//]: # (---)
-
-[//]: # ()
-[//]: # (## ✅ Step 6 — If You Have a Conflict)
-
-[//]: # ()
-[//]: # (Do not panic. Tell Lead 1 or Lead 2 immediately.)
-
-[//]: # (They will help resolve the conflict.)
-
-[//]: # ()
-[//]: # (---)
-
-[//]: # ()
+---
