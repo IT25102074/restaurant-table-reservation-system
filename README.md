@@ -25,7 +25,7 @@ This project was developed as a **group project for the Object-Oriented Programm
 | Name | Role | Module | GitHub |
 |-----|-----|-----|-----|
 | Sahan | Backend Architect | Project Setup, Authentication, Notifications | https://github.com/IT25102074 |
-| Thirshe | QA & Integration, Frontend | Admin Dashboard & Special Requests | @ArsenicV |
+| Thirshe | QA & Integration, Frontend | Admin Dashboard & Special Requests | https://github.com/ArsenicV |
 | Swetha | Developer | User Management | @username |
 | Kowshika | Developer | Table Management | @username |
 | Binuth | Developer | Reservation Management | @username |
