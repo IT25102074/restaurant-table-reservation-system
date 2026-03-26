@@ -194,12 +194,5 @@ src
 
 ---
 
-# 📄 License
 
-This project was developed for **educational purposes** as part of a **university group assignment**.
 
----
-
-# 📬 Contact
-
-For questions or issues related to the project, please contact the development team through GitHub.
