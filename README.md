@@ -24,12 +24,12 @@ This project was developed as a **group project for the Object-Oriented Programm
 
 | Name | Role | Module | GitHub |
 |-----|-----|-----|-----|
-| Sahan | Developer |  Authentication, Admin Dashboard & Notifications | https://github.com/IT25102074 |
-| Thirshe | Developer |Authentication,Special Requests | https://github.com/ArsenicV |
+| Sahan | Backend Architect | Project Setup, Authentication, Notifications | https://github.com/IT25102074 |
+| Thirshe | QA & Integration, Frontend | Admin Dashboard & Special Requests | https://github.com/ArsenicV |
 | Swetha | Developer | User Management | @username |
 | Kowshika | Developer | Table Management | @username |
 | Binuth | Developer | Reservation Management | @username |
-| Hashini | Developer | Feedback and Review Management | @username |
+| Hashini | Developer | Notification & Feedback | @username |
 
 ---
 
@@ -170,8 +170,8 @@ src
 | User Management | Swetha | In Progress |
 | Table Management | Kowshika | In Progress |
 | Reservation Management | Binuth | In Progress |
-| Feedback | Hashini | In Progress |
-| Admin Dashboard & Notification  | Thirshe | In Progress |
+| Notification & Feedback | Hashini | In Progress |
+| Admin Dashboard | Thirshe | In Progress |
 | Authentication & Security | Sahan | In Progress |
 
 ---
@@ -194,5 +194,12 @@ src
 
 ---
 
+# 📄 License
 
+This project was developed for **educational purposes** as part of a **university group assignment**.
 
+---
+
+# 📬 Contact
+
+For questions or issues related to the project, please contact the development team through GitHub.
