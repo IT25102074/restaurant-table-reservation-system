@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Management Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="background-blur"></div>
+
+<header class="topbar">
+    <div>
+        <h1>Table Management</h1>
+        <p>Manage table details, availability, and reservation readiness.</p>
+    </div>
+    <nav>
+        <a class="btn btn-secondary" th:href="@{/tables}">View Table List</a>
+        <a class="btn btn-primary" th:href="@{/tables/add}">Add Table</a>
+    </nav>
+</header>
+
+<main class="container">
+    <section class="grid stats-grid">
+        <article class="card stat-card">
+            <h3>Total Tables</h3>
+            <p th:text="${totalTables}">0</p>
+        </article>
+        <article class="card stat-card">
+            <h3>Available</h3>
+            <p th:text="${availableTables}">0</p>
+        </article>
+        <article class="card stat-card">
+            <h3>Reserved</h3>
+            <p th:text="${reservedTables}">0</p>
+        </article>
+        <article class="card stat-card">
+            <h3>Indoor / Outdoor</h3>
+            <p><span th:text="${indoorTables}">0</span> / <span th:text="${outdoorTables}">0</span></p>
+        </article>
+    </section>
+
+    <section class="card">
+        <div class="card-header-row">
+            <h2>Current Tables</h2>
+            <a class="text-link" th:href="@{/tables}">Open full management view</a>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Table Code</th>
+                    <th>Capacity</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(tables)}">
+                    <td colspan="6" class="empty-state">No tables found. Add your first table to begin.</td>
+                </tr>
+                <tr th:each="table : ${tables}">
+                    <td th:text="${table.id}">1</td>
+                    <td th:text="${table.tableCode}">T-01</td>
+                    <td th:text="${table.capacity}">4</td>
+                    <td th:text="${table.type}">INDOOR</td>
+                    <td>
+                        <span class="status-pill" th:classappend="| status-${#strings.toLowerCase(table.status.name())}|"
+                              th:text="${table.status}">AVAILABLE</span>
+                    </td>
+                    <td>
+                        <a class="action-link" th:href="@{/tables/{id}/edit(id=${table.id})}">Edit</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<script th:src="@{/js/table-ui.js}"></script>
+</body>
+</html>

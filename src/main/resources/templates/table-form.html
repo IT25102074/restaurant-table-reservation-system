@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit} ? 'Edit Table' : 'Add Table'">Table Form</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="background-blur"></div>
+
+<header class="topbar">
+    <div>
+        <h1 th:text="${isEdit} ? 'Edit Table Page' : 'Add Table Page'">Add Table Page</h1>
+        <p>Enter table details including capacity, type, and availability status.</p>
+    </div>
+    <nav>
+        <a class="btn btn-secondary" th:href="@{/tables}">Back to List</a>
+        <a class="btn btn-secondary" th:href="@{/}">Dashboard</a>
+    </nav>
+</header>
+
+<main class="container">
+    <section class="card form-card">
+        <form th:action="${isEdit} ? @{/tables/{id}(id=${tableId})} : @{/tables}" th:object="${tableForm}" method="post" novalidate>
+            <div class="form-grid">
+                <div class="field-group">
+                    <label for="tableCode">Table Code</label>
+                    <input id="tableCode" type="text" th:field="*{tableCode}" placeholder="Example: T-01">
+                    <small class="error-text" th:if="${#fields.hasErrors('tableCode')}" th:errors="*{tableCode}"></small>
+                </div>
+
+                <div class="field-group">
+                    <label for="capacity">Capacity</label>
+                    <input id="capacity" type="number" min="1" th:field="*{capacity}" placeholder="Example: 4">
+                    <small class="error-text" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></small>
+                </div>
+
+                <div class="field-group">
+                    <label for="type">Table Type</label>
+                    <select id="type" th:field="*{type}">
+                        <option value="">Select type</option>
+                        <option th:each="typeValue : ${tableTypes}" th:value="${typeValue}" th:text="${typeValue}"></option>
+                    </select>
+                    <small class="error-text" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></small>
+                </div>
+
+                <div class="field-group">
+                    <label for="status">Availability Status</label>
+                    <select id="status" th:field="*{status}">
+                        <option value="">Select status</option>
+                        <option th:each="statusValue : ${tableStatuses}" th:value="${statusValue}" th:text="${statusValue}"></option>
+                    </select>
+                    <small class="error-text" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></small>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit" th:text="${isEdit} ? 'Update Table' : 'Create Table'">Create Table</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<script th:src="@{/js/table-ui.js}"></script>
+</body>
+</html>

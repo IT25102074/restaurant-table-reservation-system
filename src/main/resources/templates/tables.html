@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table List</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="background-blur"></div>
+
+<header class="topbar">
+    <div>
+        <h1>Table List Page</h1>
+        <p>View availability, edit details, and remove unused tables.</p>
+    </div>
+    <nav>
+        <a class="btn btn-secondary" th:href="@{/}">Dashboard</a>
+        <a class="btn btn-primary" th:href="@{/tables/add}">Add Table</a>
+    </nav>
+</header>
+
+<main class="container">
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert error" th:if="${error}" th:text="${error}"></div>
+
+    <section class="card">
+        <div class="toolbar">
+            <input id="tableSearch" type="text" placeholder="Search by table code, type, or status...">
+            <span id="visibleCount" class="toolbar-count">0 shown</span>
+        </div>
+
+        <div class="table-wrapper">
+            <table id="tableListTable">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Table Code</th>
+                    <th>Capacity</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(tables)}">
+                    <td colspan="6" class="empty-state">No records yet. Add a table to get started.</td>
+                </tr>
+                <tr th:each="table : ${tables}" class="data-row">
+                    <td th:text="${table.id}">1</td>
+                    <td class="searchable" th:text="${table.tableCode}">T-01</td>
+                    <td th:text="${table.capacity}">4</td>
+                    <td class="searchable" th:text="${table.type}">INDOOR</td>
+                    <td class="searchable">
+                        <span class="status-pill" th:classappend="| status-${#strings.toLowerCase(table.status.name())}|"
+                              th:text="${table.status}">AVAILABLE</span>
+                    </td>
+                    <td class="actions">
+                        <a class="action-link" th:href="@{/tables/{id}/edit(id=${table.id})}">Edit</a>
+                        <form th:action="@{/tables/{id}/delete(id=${table.id})}" method="post" class="inline-form delete-form">
+                            <button type="submit" class="btn-link danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<script th:src="@{/js/table-ui.js}"></script>
+</body>
+</html>

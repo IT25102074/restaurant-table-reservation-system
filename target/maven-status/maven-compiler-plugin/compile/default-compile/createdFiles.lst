@@ -1,0 +1,6 @@
+com\restaurant\tablemanagement\model\TableStatus.class
+com\restaurant\tablemanagement\model\TableForm.class
+com\restaurant\tablemanagement\model\TableType.class
+com\restaurant\tablemanagement\controller\TableController.class
+com\restaurant\tablemanagement\model\RestaurantTable.class
+com\restaurant\tablemanagement\TableManagementApplication.class
