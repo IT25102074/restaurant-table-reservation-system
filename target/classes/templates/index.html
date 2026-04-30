@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reservation System</title>
+</head>
+<body>
+<h1>Welcome to Reservation System</h1>
+</body>
+</html>
+
+<form action="/reserve" method="post">
+
+    Name:
+    <input type="text" name="name"><br>
+    Date:
+    <input type="date" name="date"><br>
+    Time:
+    <input type="time" name="time"><br>
+    People:
+    <input type="number" name="people"><br>
+    Contact Number:
+    <input type="tel" name="phoneNumber"
+           pattern="[0-9]{10}"
+           required><br>
+    Special Requests:
+    <textarea name="specialRequest"></textarea><br>
+
+    <button type="submit">Submit</button>
+
+</form>
