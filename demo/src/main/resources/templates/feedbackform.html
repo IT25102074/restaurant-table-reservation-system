@@ -1,0 +1,30 @@
+<!--Test krnn withry pancho-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Yr Special Request </title>
+</head>
+
+<body>
+<h2>Submit specialrequest</h2>
+<form th:action="@{/feedback/submit}" th:object="${feedbackRequest}" method="post">
+    <label>Customer ID:</label>
+    <input type="number" th:field="*{customerId}" required /><br/><br/>
+
+    <label>Rating (1-5):</label>
+    <input type="number" th:field="*{rating}" min="1" max="5" required /><br/><br/>
+
+    <label>Comment:</label>
+    <textarea th:field="*{comment}" rows="4" cols="40"></textarea><br/><br/>
+
+    <button type="submit">Submit Feedback</button>
+</form>
+
+<br/>
+<a href="/specialRequest/all">View All Feedback</a>
+</body>
+
+</body>
+</html>

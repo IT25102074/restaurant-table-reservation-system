@@ -1,0 +1,28 @@
+<!--Test krnn withry pancho-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>specialreqlist</title>
+</head>
+<body>
+<h2>All specialrequests</h2>
+<table border="1">
+  <tr>
+    <th>Customer</th>
+    <th>Rating</th>
+    <th>Comment</th>
+    <th>Date</th>
+  </tr>
+  <tr th:each="fb : ${feedbackList}">
+    <td th:text="${fb.customer.name}"></td>
+    <td th:text="${fb.rating}"></td>
+    <td th:text="${fb.comment}"></td>
+    <td th:text="${fb.createdAt}"></td>
+  </tr>
+</table>
+
+<br/>
+<a href="/specialRequestModel">Submit New Feedback</a>
+</body>
+</html>
