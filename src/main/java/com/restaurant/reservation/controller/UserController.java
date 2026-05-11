@@ -1,18 +1,14 @@
 package com.restaurant.reservation.controller;
 
+import com.restaurant.reservation.model.Role;
 import com.restaurant.reservation.model.User;
 import com.restaurant.reservation.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/users")
@@ -26,148 +22,124 @@ public class UserController {
 		this.userService = userService;
 	}
 
+	// ================= REGISTER =================
+
+	@GetMapping("/register")
+	public String showRegisterPage() {
+		return "register";
+	}
+
 	@PostMapping("/register")
-	public String register(@RequestParam String fullName,
-						   @RequestParam String email,
+	public String register(@RequestParam String username,
 						   @RequestParam String password,
 						   @RequestParam String confirmPassword,
-					   @RequestParam String phoneNumber,
-						   RedirectAttributes redirectAttributes,
-						   HttpSession session) {
-		try {
-			if (!password.equals(confirmPassword)) {
-				throw new IllegalArgumentException("Passwords do not match");
-			}
-			String normalizedPhone = phoneNumber == null ? "" : phoneNumber.trim();
-			if (!normalizedPhone.matches("\\d{10}")) {
-				throw new IllegalArgumentException("Phone number must contain exactly 10 digits");
-			}
-			User user = new User();
-			user.setFullName(fullName);
-			user.setEmail(email);
-			user.setPassword(password);
-			user.setPhoneNumber(normalizedPhone);
-			user.setCountry("Sri Lanka");
-			user.setProfileImageUrl("/assets/img/avatars/1.png");
+						   Model model) {
 
-			User saved = userService.register(user);
-			session.setAttribute(SESSION_USER_ID, saved.getId());
-			redirectAttributes.addFlashAttribute("successMessage", "Registration successful. Welcome, " + saved.getFullName() + "!");
-			return "redirect:/users/profile";
-		} catch (IllegalArgumentException ex) {
-			redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
-			return "redirect:/register";
+		// password check
+		if (!password.equals(confirmPassword)) {
+			model.addAttribute("error", "Passwords do not match");
+			return "register";
 		}
+
+		// username check
+		User existingUser = userService.findByUsername(username);
+
+		if (existingUser != null) {
+			model.addAttribute("error", "Username already exists");
+			return "register";
+		}
+
+		// create user
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setRole(Role.USER);
+
+		userService.saveUser(user);
+
+		return "redirect:/users/login";
+	}
+
+	// ================= LOGIN =================
+
+	@GetMapping("/login")
+	public String showLoginPage() {
+		return "login";
 	}
 
 	@PostMapping("/login")
-	public String login(@RequestParam String email,
+	public String login(@RequestParam String username,
 						@RequestParam String password,
-						RedirectAttributes redirectAttributes,
-						HttpSession session) {
-		return userService.login(email, password)
-				.map(user -> {
-					session.setAttribute(SESSION_USER_ID, user.getId());
-					return "redirect:/users/profile";
-				})
-				.orElseGet(() -> {
-					redirectAttributes.addFlashAttribute("errorMessage", "Invalid email or password");
-					return "redirect:/login";
-				});
-	}
+						HttpSession session,
+						Model model) {
 
-	@GetMapping("/profile")
-	public String profile(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-		Long userId = (Long) session.getAttribute(SESSION_USER_ID);
-		if (userId == null) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Please login first");
-			return "redirect:/login";
-		}
+		User user = userService.findByUsername(username);
 
-		User user = userService.findById(userId).orElse(null);
 		if (user == null) {
-			session.removeAttribute(SESSION_USER_ID);
-			redirectAttributes.addFlashAttribute("errorMessage", "User account not found");
-			return "redirect:/login";
+			model.addAttribute("error", "Invalid username or password");
+			return "login";
 		}
 
-		model.addAttribute("user", user);
-		return "profile";
+		// simple password check
+		// if using encrypted passwords, use PasswordEncoder.matches()
+		if (!user.getPassword().equals(password)) {
+			model.addAttribute("error", "Invalid username or password");
+			return "login";
+		}
+
+		session.setAttribute(SESSION_USER_ID, user.getId());
+
+		return "redirect:/";
 	}
 
-	@PostMapping("/profile/update")
-	public String updateProfile(@ModelAttribute User payload,
-								HttpSession session,
-								RedirectAttributes redirectAttributes) {
-		Long userId = (Long) session.getAttribute(SESSION_USER_ID);
-		if (userId == null) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Please login first");
-			return "redirect:/login";
-		}
-
-		try {
-			userService.update(userId, payload);
-			redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully");
-		} catch (IllegalArgumentException ex) {
-			redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
-		}
-		return "redirect:/users/profile";
-	}
-
-	@PostMapping("/profile/photo")
-	public String updatePhoto(@RequestParam("profilePhoto") MultipartFile profilePhoto,
-							  HttpSession session,
-							  RedirectAttributes redirectAttributes) {
-		Long userId = (Long) session.getAttribute(SESSION_USER_ID);
-		if (userId == null) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Please login first");
-			return "redirect:/login";
-		}
-
-		if (profilePhoto == null || profilePhoto.isEmpty()) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Please choose an image to upload");
-			return "redirect:/users/profile";
-		}
-
-		try {
-			String imageUrl = userService.storeProfileImage(profilePhoto);
-			User updatePayload = new User();
-			updatePayload.setProfileImageUrl(imageUrl);
-			userService.update(userId, updatePayload);
-			redirectAttributes.addFlashAttribute("successMessage", "Profile photo updated successfully");
-		} catch (RuntimeException ex) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Failed to upload image");
-		}
-
-		return "redirect:/users/profile";
-	}
-
-	@PostMapping("/delete/{id}")
-	public String delete(@PathVariable Long id,
-						 HttpSession session,
-						 RedirectAttributes redirectAttributes) {
-		Long sessionUserId = (Long) session.getAttribute(SESSION_USER_ID);
-		if (sessionUserId == null) {
-			return "redirect:/login";
-		}
-
-		try {
-			userService.delete(id);
-			if (sessionUserId.equals(id)) {
-				session.removeAttribute(SESSION_USER_ID);
-				redirectAttributes.addFlashAttribute("successMessage", "Account deleted");
-				return "redirect:/";
-			}
-			redirectAttributes.addFlashAttribute("successMessage", "User deleted");
-		} catch (IllegalArgumentException ex) {
-			redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
-		}
-		return "redirect:/users/profile";
-	}
+	// ================= LOGOUT =================
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
-		return "redirect:/login";
+		return "redirect:/users/login";
+	}
+
+	// ================= USERS LIST =================
+
+	@GetMapping
+	public String getAllUsers(Model model) {
+
+		List<User> users = userService.findAllUsers();
+
+		model.addAttribute("users", users);
+
+		return "users";
+	}
+
+	// ================= DELETE USER =================
+
+	@GetMapping("/delete/{id}")
+	public String deleteUser(@PathVariable Long id) {
+
+		userService.deleteUser(id);
+
+		return "redirect:/users";
+	}
+
+	// ================= EDIT USER =================
+
+	@GetMapping("/edit/{id}")
+	public String showEditPage(@PathVariable Long id,
+							   Model model) {
+
+		User user = userService.findById(id);
+
+		model.addAttribute("user", user);
+
+		return "edit-user";
+	}
+
+	@PostMapping("/update")
+	public String updateUser(@ModelAttribute User user) {
+
+		userService.updateUser(user);
+
+		return "redirect:/users";
 	}
 }
