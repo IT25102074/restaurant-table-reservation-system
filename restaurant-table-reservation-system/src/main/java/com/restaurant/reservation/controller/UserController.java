@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // ─── View Profile ─────────────────────────────────────────────────────────
+    // View Profile 
 
     @GetMapping
     public String viewProfile(HttpSession session, Model model,
@@ -40,7 +40,7 @@ public class UserController {
         }
     }
 
-    // ─── Update Profile ───────────────────────────────────────────────────────
+    //Update Profile
 
     @PostMapping("/update")
     public String updateProfile(@RequestParam String fullName,
@@ -65,7 +65,7 @@ public class UserController {
         return "redirect:/profile";
     }
 
-    // ─── Delete Account ───────────────────────────────────────────────────────
+    // Delete Account
 
     @PostMapping("/delete")
     public String deleteAccount(HttpSession session,
