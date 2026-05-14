@@ -19,8 +19,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    // ─── Register ─────────────────────────────────────────────────────────────
-
+    // Register
     /**
      * Registers a new Customer.
      * Validates: unique email, password length, phone format.
@@ -47,7 +46,7 @@ public class UserService {
         return userRepository.save(customer);
     }
 
-    // ─── Login ────────────────────────────────────────────────────────────────
+    // Login 
 
     /**
      * Validates login credentials.
@@ -70,8 +69,7 @@ public class UserService {
         return user;
     }
 
-    // ─── Profile CRUD ─────────────────────────────────────────────────────────
-
+    // Profile CRUD 
     /**
      * Get user by ID.
      */
@@ -107,8 +105,7 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    // ─── Admin: View All Users ────────────────────────────────────────────────
-
+    // Admin: View All Users 
     /**
      * Get all users (admin use).
      */
