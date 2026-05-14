@@ -52,7 +52,7 @@ public abstract class User {
         this.createdAt = LocalDateTime.now();
     }
 
-    // ─── Abstract Methods
+    //Abstract Methods
 
     /**
      * OOP: ABSTRACTION — Subclasses must define their own dashboard URL.
@@ -60,7 +60,7 @@ public abstract class User {
      */
     public abstract String getDashboardUrl();
 
-    // ─── Concrete Methods ─────────────────────────────────────────────────────
+    // Concrete Methods
 
     public void login() {
         System.out.println(fullName + " logged in.");
