@@ -28,6 +28,8 @@ git pull origin develop
 
 Wait for **Maven to download all dependencies**.
 
+> 💡 **Tip:** Install the **Lombok plugin** from **File → Settings → Plugins** and enable **Annotation Processing** from **File → Settings → Build → Compiler → Annotation Processors** for the best IDE experience.
+
 ---
 
 ### Setup Your Database
@@ -68,13 +70,12 @@ http://localhost:8080
 ```
 ReserveSmartApplication.java
 application.properties
-model/User.java                       ← abstract base class
-model/Admin.java
-model/Customer.java
 model/Notification.java               ← abstract base class
 model/SystemNotification.java
 model/EmailNotification.java
 model/SmsNotification.java
+dto/UserDTO.java
+dto/NotificationDTO.java
 service/ReservationValidator.java     ← interface
 service/ConflictValidator.java
 service/CapacityValidator.java
@@ -85,26 +86,36 @@ service/EmailNotificationService.java
 service/SmsNotificationService.java
 controller/NotificationController.java
 controller/AuthController.java
-views/auth/login.jsp
-views/auth/register.jsp
-views/common/header.jsp
-views/common/footer.jsp
 ```
 
 ---
 
 ### Developer 2 — Thirshe (QA & Frontend Lead)
 
-**Responsible for:**
+**Responsible for all frontend (JSP) files:**
 
 ```
 service/AnalyticsService.java
 controller/AdminController.java
+views/auth/login.jsp
+views/auth/register.jsp
+views/auth/forgot-password.jsp
+views/auth/reset-password.jsp
+views/common/header.jsp
+views/common/footer.jsp
+views/error.jsp
+views/customer/dashboard.jsp
+views/customer/profile.jsp
+views/customer/tables.jsp
+views/customer/reservation-form.jsp
+views/customer/my-reservations.jsp
+views/customer/feedback.jsp
+views/customer/notifications.jsp
 views/admin/dashboard.jsp
 views/admin/users.jsp
-views/admin/tables.jsp         ← UI polish only
-views/admin/reservations.jsp   ← UI polish only
-views/admin/feedback.jsp       ← UI polish only
+views/admin/tables.jsp
+views/admin/reservations.jsp
+views/admin/feedback.jsp
 ```
 
 **Also responsible for:**
@@ -119,11 +130,12 @@ views/admin/feedback.jsp       ← UI polish only
 **Responsible for:**
 
 ```
+model/User.java                      
+model/Admin.java
+model/Customer.java
 repository/UserRepository.java
 service/UserService.java
 controller/UserController.java
-views/customer/profile.jsp
-views/customer/dashboard.jsp
 ```
 
 ---
@@ -134,10 +146,10 @@ views/customer/dashboard.jsp
 
 ```
 model/RestaurantTable.java
+dto/TableDTO.java
 repository/TableRepository.java
 service/TableService.java
 controller/TableController.java
-views/customer/tables.jsp
 ```
 
 ---
@@ -148,11 +160,10 @@ views/customer/tables.jsp
 
 ```
 model/Reservation.java
+dto/ReservationDTO.java
 repository/ReservationRepository.java
 service/ReservationService.java
 controller/ReservationController.java
-views/customer/reservation-form.jsp
-views/customer/my-reservations.jsp
 ```
 
 ---
@@ -163,11 +174,10 @@ views/customer/my-reservations.jsp
 
 ```
 model/Feedback.java
+dto/FeedbackDTO.java
 repository/FeedbackRepository.java
 service/FeedbackService.java
 controller/FeedbackController.java
-views/customer/feedback.jsp
-views/customer/notifications.jsp
 ```
 
 ---
@@ -200,7 +210,7 @@ git checkout -b feature/notification-system
 
 ```bash
 git add .
-git commit -m "[ADD] User registration logic"
+git commit -m " User registration logic"
 git push origin feature/user-management
 ```
 
@@ -223,37 +233,7 @@ git push origin feature/user-management
 
 ---
 
-## ✅ Step 4 — Commit Message Rules
-
-Always follow this format:
-
-```
-[TYPE] Short description
-```
-
-| Type | When to Use |
-|------|-------------|
-| `INIT` | First setup only |
-| `ADD` | Adding new feature or file |
-| `FIX` | Bug fix |
-| `UPDATE` | Changing existing code |
-| `DOCS` | Documentation updates |
-| `REMOVE` | Removing unused code |
-
-**Examples:**
-
-```
-[ADD] User registration with MySQL
-[FIX] Table availability check bug
-[UPDATE] Reservation conflict validation
-[DOCS] Update README setup steps
-[ADD] Gmail email notification service
-[FIX] JSP view resolver path issue
-```
-
----
-
-## ✅ Step 5 — Branch Strategy
+## ✅ Step 4 — Branch Strategy
 
 ```
 main          ← production-ready code only (Lead merges here at the end)
@@ -268,7 +248,7 @@ main          ← production-ready code only (Lead merges here at the end)
 
 ---
 
-## ✅ Step 6 — Important Rules
+## ✅ Step 5 — Important Rules
 
 1. **Never push directly to `main` or `develop`.**
 2. Always work on your own **feature branch**.
@@ -295,7 +275,7 @@ git checkout feature/your-feature-name
 git merge develop
 # Fix the conflicts in IntelliJ
 git add .
-git commit -m "[FIX] Resolve merge conflict with develop"
+git commit -m " Resolve merge conflict with develop"
 git push origin feature/your-feature-name
 ```
 
@@ -309,19 +289,19 @@ Then create your Pull Request as normal.
 |---------------|-------|
 | `model/User.java`, `Admin.java`, `Customer.java` | Sahan |
 | `model/Notification*.java`, `*Notification*.java` | Sahan |
+| `dto/UserDTO.java`, `dto/NotificationDTO.java` | Sahan |
 | `service/*Validator.java`, `ReservationValidator.java` | Sahan |
-| `controller/AuthController.java` | Sahan |
-| `views/auth/*.jsp`, `views/common/*.jsp` | Sahan |
-| `service/AnalyticsService.java` | Thirshe |
-| `controller/AdminController.java`, `views/admin/*.jsp` | Thirshe |
+| `controller/AuthController.java`, `controller/NotificationController.java` | Sahan |
+| **All `views/*.jsp` files** (auth, common, customer, admin, error) | **Thirshe** |
+| `service/AnalyticsService.java`, `controller/AdminController.java` | Thirshe |
 | `repository/UserRepository.java`, `service/UserService.java` | Swetha |
-| `controller/UserController.java`, `views/customer/profile.jsp` | Swetha |
-| `model/RestaurantTable.java`, `service/TableService.java` | Kowshika |
-| `controller/TableController.java`, `views/customer/tables.jsp` | Kowshika |
-| `model/Reservation.java`, `service/ReservationService.java` | Binuth |
-| `controller/ReservationController.java`, `views/customer/reservation-form.jsp` | Binuth |
-| `model/Feedback.java`, `service/FeedbackService.java` | Hashini |
-| `controller/FeedbackController.java`, `views/customer/feedback.jsp` | Hashini |
+| `controller/UserController.java` | Swetha |
+| `model/RestaurantTable.java`, `dto/TableDTO.java` | Kowshika |
+| `service/TableService.java`, `controller/TableController.java` | Kowshika |
+| `model/Reservation.java`, `dto/ReservationDTO.java` | Binuth |
+| `service/ReservationService.java`, `controller/ReservationController.java` | Binuth |
+| `model/Feedback.java`, `dto/FeedbackDTO.java` | Hashini |
+| `service/FeedbackService.java`, `controller/FeedbackController.java` | Hashini |
 
 ---
 
