@@ -70,9 +70,6 @@ http://localhost:8080
 ```
 ReserveSmartApplication.java
 application.properties
-model/User.java                       ← abstract base class
-model/Admin.java
-model/Customer.java
 model/Notification.java               ← abstract base class
 model/SystemNotification.java
 model/EmailNotification.java
@@ -133,6 +130,9 @@ views/admin/feedback.jsp
 **Responsible for:**
 
 ```
+model/User.java                      
+model/Admin.java
+model/Customer.java
 repository/UserRepository.java
 service/UserService.java
 controller/UserController.java
