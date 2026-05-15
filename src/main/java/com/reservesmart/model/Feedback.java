@@ -1,64 +1,66 @@
 package com.reservesmart.model;
 
 import jakarta.persistence.*;
-
+import lombok.Getter;
+import lombok.Setter;
 import java.time.LocalDateTime;
 
+/**
+ * OOP: ENCAPSULATION — Feedback fields are private.
+ * OOP: ASSOCIATION — Feedback belongs to one User.
+ */
 @Entity
 @Table(name = "feedback")
+@Getter @Setter
 public class Feedback {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long feedbackId;
 
-    @Column(name = "content", nullable = false, length = 200)
-    private String content;
+    // OOP: ASSOCIATION — Many feedbacks belong to one User
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @Column(name = "message", nullable = false, columnDefinition = "TEXT")
+    private String message;
 
-    @Column(name = "datetime", nullable = false)
-    private LocalDateTime dateTime;
+    @Column(name = "rating", nullable = false)
+    private int rating;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    //Constructors ──
 
     public Feedback() {
+        this.createdAt = LocalDateTime.now();
     }
 
-    public Feedback(Long id, String content, Long userId, LocalDateTime dateTime) {
-        this.id = id;
-        this.content = content;
-        this.userId = userId;
-        this.dateTime = dateTime;
+    public Feedback(User user, String message, int rating) {
+        this.user = user;
+        this.message = message;
+        this.rating = rating;
+        this.createdAt = LocalDateTime.now();
     }
 
-    public Long getId() {
-        return id;
+    // Business Logic Methods
+
+    public void submitFeedback() {
+        System.out.println("Feedback submitted by: " + user.getFullName());
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void updateFeedback(String newMessage, int newRating) {
+        this.message = newMessage;
+        this.rating = newRating;
     }
 
-    public String getContent() {
-        return content;
+    public void deleteFeedback() {
+        System.out.println("Feedback deleted.");
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public boolean isPositive() {
+        return this.rating >= 4;
     }
 }
