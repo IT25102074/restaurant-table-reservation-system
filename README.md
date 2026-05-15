@@ -27,10 +27,10 @@ This system allows customers to reserve tables online and enables administrators
 |----------|--------------------------|---------------------------------------------|--------|
 | Sahan    | Backend Architect        | Project Setup, Auth, Notifications          | https://github.com/IT25102074 |
 | Thirshe  | QA & Frontend            | Admin Dashboard, Special Requests           | https://github.com/ArsenicV |
-| Swetha   | Developer                | User Management                            | - |
+| Swetha   | Developer                | User Management                            | https://github.com/IT25101496 |
 | Kowshika | Developer                | Table Management                           | - |
 | Binuth   | Developer                | Reservation Management                     | - |
-| Hashini  | Developer                | Feedback                    | - |
+| Hashini  | Developer                | Feedback                    | https://github.com/IT25102901 |
 
 ---
 
