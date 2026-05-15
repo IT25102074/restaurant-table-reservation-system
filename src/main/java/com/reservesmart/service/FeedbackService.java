@@ -1,129 +1,132 @@
 package com.reservesmart.service;
 
+import com.reservesmart.dto.FeedbackDTO;
 import com.reservesmart.model.Feedback;
+import com.reservesmart.model.User;
 import com.reservesmart.repository.FeedbackRepository;
-
+import com.reservesmart.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
+/**
+ * OOP: ENCAPSULATION — All feedback logic is hidden inside this service.
+ * OOP: INFORMATION HIDING — Controller never touches FeedbackRepository directly.
+ */
 @Service
 public class FeedbackService {
-    private final FeedbackRepository feedbackRepository;
 
-    public FeedbackService(FeedbackRepository feedbackRepository) {
-        this.feedbackRepository = feedbackRepository;
+    @Autowired
+    private FeedbackRepository feedbackRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    //CREATE
+
+    public Feedback submitFeedback(Long userId, String message, int rating) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        validateFeedback(message, rating);
+
+        Feedback feedback = new Feedback(user, message, rating);
+
+        // OOP: calling method defined in Feedback model
+        feedback.submitFeedback();
+
+        return feedbackRepository.save(feedback);
     }
 
-    public String createFeedback(Long userId, String content) {
-        if (content == null || content.isBlank()) {
-            throw new IllegalArgumentException("Feedback content is required");
-        }
-        if (content.length() > 200) {
-            throw new IllegalArgumentException("Feedback content must be 200 characters or less");
-        }
-
-        Feedback feedback = new Feedback();
-        feedback.setUserId(userId);
-        feedback.setContent(content.trim());
-        feedback.setDateTime(LocalDateTime.now());
-
-        feedbackRepository.save(feedback);
-        return "Feedback created successfully";
+    // READ
+    public List<Feedback> getMyFeedback(Long userId) {
+        return feedbackRepository.findByUserUserIdOrderByCreatedAtDesc(userId);
     }
 
-    public List<Feedback> getAllFeedbacks() {
-        return feedbackRepository.findAll();
+    public Feedback getFeedbackById(Long feedbackId) {
+        return feedbackRepository.findById(feedbackId)
+                .orElseThrow(() -> new IllegalArgumentException("Feedback not found."));
     }
 
-    public List<Feedback> getFeedbacksByUserId(Long userId, String keyword) {
-        List<Feedback> feedbacks = feedbackRepository.findByUserId(userId);
-
-        if (keyword != null && !keyword.isEmpty()) {
-            String search = keyword.toLowerCase();
-            feedbacks = feedbacks.stream()
-                    .filter(feedback -> feedback.getContent() != null &&
-                            feedback.getContent().toLowerCase().contains(search))
-                    .toList();
-        }
-
-        return feedbacks;
+    public List<Feedback> getAllFeedback() {
+        return feedbackRepository.findAllByOrderByCreatedAtDesc();
     }
 
-    public String updateFeedback(Feedback feedbackRequest) throws Exception {
-        validateFeedbackUpdate(feedbackRequest);
+    // UPDATE
 
-        Optional<Feedback> byId = feedbackRepository.findById(feedbackRequest.getId());
+    public Feedback updateFeedback(Long feedbackId, Long userId,
+                                   String message, int rating) {
 
-        if (byId.isEmpty()) {
-            throw new Exception("Feedback is not found");
+        Feedback feedback = getFeedbackById(feedbackId);
+
+        // Only owner can update
+        if (!feedback.getUser().getUserId().equals(userId)) {
+            throw new IllegalArgumentException("You can only edit your own feedback.");
         }
 
-        Feedback feedback = byId.get();
-        feedback.setContent(feedbackRequest.getContent().trim());
+        validateFeedback(message, rating);
 
-        feedbackRepository.save(feedback);
-        return "Feedback updated successfully";
+        // OOP: calling method defined in Feedback model
+        feedback.updateFeedback(message, rating);
+
+        return feedbackRepository.save(feedback);
     }
 
-    public String updateFeedbackForUser(Long userId, Feedback feedbackRequest) throws Exception {
-        validateFeedbackUpdate(feedbackRequest);
+    //  DELETE
 
-        Optional<Feedback> byId = feedbackRepository.findById(feedbackRequest.getId());
+    public void deleteFeedback(Long feedbackId, Long userId, String role) {
 
-        if (byId.isEmpty()) {
-            throw new Exception("Feedback is not found");
-        }
+        Feedback feedback = getFeedbackById(feedbackId);
 
-        Feedback feedback = byId.get();
-        if (!Objects.equals(feedback.getUserId(), userId)) {
-            throw new SecurityException("You are not allowed to update this feedback");
-        }
-
-        feedback.setContent(feedbackRequest.getContent().trim());
-        feedbackRepository.save(feedback);
-        return "Feedback updated successfully";
-    }
-
-    public String deleteFeedback(Long id) throws RuntimeException {
-        Optional<Feedback> byId = feedbackRepository.findById(id);
-
-        if (byId.isEmpty()) {
-            throw new RuntimeException("Feedback is not found");
-        }
-
-        feedbackRepository.delete(byId.get());
-        return "Feedback deleted successfully";
-    }
-
-    public String deleteFeedbackForUser(Long id, Long userId) {
-        Optional<Feedback> byId = feedbackRepository.findById(id);
-
-        if (byId.isEmpty()) {
-            throw new RuntimeException("Feedback is not found");
-        }
-
-        Feedback feedback = byId.get();
-        if (!Objects.equals(feedback.getUserId(), userId)) {
-            throw new SecurityException("You are not allowed to delete this feedback");
+        // Customer can only delete own feedback; Admin can delete any
+        if (!"ADMIN".equals(role) && !feedback.getUser().getUserId().equals(userId)) {
+            throw new IllegalArgumentException("You can only delete your own feedback.");
         }
 
         feedbackRepository.delete(feedback);
-        return "Feedback deleted successfully";
     }
 
-    private void validateFeedbackUpdate(Feedback feedbackRequest) {
-        if (feedbackRequest.getId() == null) {
-            throw new IllegalArgumentException("Feedback id is required");
+    //  ADMIN: FILTER BY RATING
+    public List<Feedback> filterByRating(Integer rating) {
+        if (rating == null) return getAllFeedback();
+        return feedbackRepository.findByRatingOrderByCreatedAtDesc(rating);
+    }
+
+    //  PRIVATE VALIDATION
+
+    /**
+     * OOP: ENCAPSULATION — Validation logic hidden inside service.
+     * OOP: INFORMATION HIDING — Controller never validates directly.
+     */
+    private void validateFeedback(String message, int rating) {
+        if (message == null || message.trim().isEmpty()) {
+            throw new IllegalArgumentException("Feedback message cannot be empty.");
         }
-        if (feedbackRequest.getContent() == null || feedbackRequest.getContent().isBlank()) {
-            throw new IllegalArgumentException("Feedback content is required");
+        if (message.trim().length() < 10) {
+            throw new IllegalArgumentException("Feedback message must be at least 10 characters.");
         }
-        if (feedbackRequest.getContent().length() > 200) {
-            throw new IllegalArgumentException("Feedback content must be 200 characters or less");
+        if (rating < 1 || rating > 5) {
+            throw new IllegalArgumentException("Rating must be between 1 and 5.");
         }
+    }
+
+    // ─── DTO Conversion ─────────────────────────────────────────────────────
+
+    public FeedbackDTO toDTO(Feedback f) {
+        FeedbackDTO dto = new FeedbackDTO();
+        dto.setFeedbackId(f.getFeedbackId());
+        dto.setUserName(f.getUser().getFullName());
+        dto.setUserEmail(f.getUser().getEmail());
+        dto.setMessage(f.getMessage());
+        dto.setRating(f.getRating());
+        dto.setCreatedAt(f.getCreatedAt());
+        return dto;
+    }
+
+    public List<FeedbackDTO> toDTOList(List<Feedback> feedbacks) {
+        return feedbacks.stream().map(this::toDTO).collect(Collectors.toList());
     }
 }
