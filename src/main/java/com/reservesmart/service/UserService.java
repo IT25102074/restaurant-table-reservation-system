@@ -4,10 +4,9 @@ import com.reservesmart.dto.UserDTO;
 import com.reservesmart.model.Customer;
 import com.reservesmart.model.User;
 import com.reservesmart.repository.FeedbackRepository;
-import com.reservesmart.repository.ReservationRepository;
 import com.reservesmart.repository.NotificationRepository;
+import com.reservesmart.repository.ReservationRepository;
 import com.reservesmart.repository.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +45,7 @@ public class UserService {
      * Validates: unique email, password length, phone format.
      */
     public User registerCustomer(String fullName, String email,
-                                 String password, String phone) {
+            String password, String phone) {
 
         // Validate unique email
         if (userRepository.existsByEmail(email)) {
@@ -117,9 +116,9 @@ public class UserService {
      * Update user profile.
      */
     public User updateProfile(Long userId,
-                              String fullName,
-                              String email,
-                              String phone) {
+            String fullName,
+            String email,
+            String phone) {
 
         User user = getUserById(userId);
 
@@ -243,7 +242,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // DTO Conversion
+    // ─── DTO Conversion ─────────────────────────────────────────────────────
 
     public UserDTO toDTO(User user) {
         UserDTO dto = new UserDTO();
