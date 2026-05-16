@@ -52,53 +52,61 @@ public class NotificationService {
 
     public void sendReservationCreated(User user, String tableNumber,
                                        String date, String time) {
-        String message = "Your reservation for Table " + tableNumber
-                + " on " + date + " at " + time + " has been created. Status: PENDING.";
+        String emailMessage = "Dear " + user.getFullName() + ",\n\nYour reservation for Table " + tableNumber
+                + " on " + date + " at " + time + " has been created. The current status is PENDING.\n\nThank you,\nReserveSmart Team";
+        
+        String smsMessage = "ReserveSmart: Reservation for Table " + tableNumber + " on " + date + " at " + time + " created. Status: PENDING.";
 
-        saveSystemNotification(user, message);
-        emailNotificationService.saveEmailNotification(user, message);
+        saveSystemNotification(user, emailMessage);
+        emailNotificationService.saveEmailNotification(user, emailMessage);
         emailNotificationService.sendEmail(user.getEmail(),
-                "Reservation Confirmed — ReserveSmart", message);
-        smsNotificationService.saveSmsNotification(user, message);
-        smsNotificationService.sendSms(user.getPhone(), message);
+                "Reservation Confirmed — ReserveSmart", emailMessage);
+        smsNotificationService.saveSmsNotification(user, smsMessage);
+        smsNotificationService.sendSms(user.getPhone(), smsMessage);
     }
 
     public void sendReservationUpdated(User user, String tableNumber,
                                        String date, String time) {
-        String message = "Your reservation for Table " + tableNumber
-                + " has been updated to " + date + " at " + time + ".";
+        String emailMessage = "Dear " + user.getFullName() + ",\n\nYour reservation for Table " + tableNumber
+                + " has been successfully updated to " + date + " at " + time + ".\n\nThank you,\nReserveSmart Team";
+        
+        String smsMessage = "ReserveSmart: Reservation for Table " + tableNumber + " updated to " + date + " at " + time + ".";
 
-        saveSystemNotification(user, message);
-        emailNotificationService.saveEmailNotification(user, message);
+        saveSystemNotification(user, emailMessage);
+        emailNotificationService.saveEmailNotification(user, emailMessage);
         emailNotificationService.sendEmail(user.getEmail(),
-                "Reservation Updated — ReserveSmart", message);
-        smsNotificationService.saveSmsNotification(user, message);
-        smsNotificationService.sendSms(user.getPhone(), message);
+                "Reservation Updated — ReserveSmart", emailMessage);
+        smsNotificationService.saveSmsNotification(user, smsMessage);
+        smsNotificationService.sendSms(user.getPhone(), smsMessage);
     }
 
     public void sendReservationCancelled(User user, String tableNumber) {
-        String message = "Your reservation for Table " + tableNumber
-                + " has been cancelled.";
+        String emailMessage = "Dear " + user.getFullName() + ",\n\nYour reservation for Table " + tableNumber
+                + " has been cancelled.\n\nWe hope to see you another time.\nReserveSmart Team";
+        
+        String smsMessage = "ReserveSmart: Reservation for Table " + tableNumber + " has been cancelled.";
 
-        saveSystemNotification(user, message);
-        emailNotificationService.saveEmailNotification(user, message);
+        saveSystemNotification(user, emailMessage);
+        emailNotificationService.saveEmailNotification(user, emailMessage);
         emailNotificationService.sendEmail(user.getEmail(),
-                "Reservation Cancelled — ReserveSmart", message);
-        smsNotificationService.saveSmsNotification(user, message);
-        smsNotificationService.sendSms(user.getPhone(), message);
+                "Reservation Cancelled — ReserveSmart", emailMessage);
+        smsNotificationService.saveSmsNotification(user, smsMessage);
+        smsNotificationService.sendSms(user.getPhone(), smsMessage);
     }
 
     public void sendReservationConfirmed(User user, String tableNumber,
                                          String date, String time) {
-        String message = "Great news! Your reservation for Table " + tableNumber
-                + " on " + date + " at " + time + " has been CONFIRMED by the restaurant.";
+        String emailMessage = "Dear " + user.getFullName() + ",\n\nGreat news! Your reservation for Table " + tableNumber
+                + " on " + date + " at " + time + " has been CONFIRMED by the restaurant.\n\nSee you soon!\nReserveSmart Team";
+        
+        String smsMessage = "ReserveSmart: Reservation for Table " + tableNumber + " on " + date + " at " + time + " is CONFIRMED!";
 
-        saveSystemNotification(user, message);
-        emailNotificationService.saveEmailNotification(user, message);
+        saveSystemNotification(user, emailMessage);
+        emailNotificationService.saveEmailNotification(user, emailMessage);
         emailNotificationService.sendEmail(user.getEmail(),
-                "Reservation Confirmed - ReserveSmart", message);
-        smsNotificationService.saveSmsNotification(user, message);
-        smsNotificationService.sendSms(user.getPhone(), message);
+                "Reservation Confirmed - ReserveSmart", emailMessage);
+        smsNotificationService.saveSmsNotification(user, smsMessage);
+        smsNotificationService.sendSms(user.getPhone(), smsMessage);
     }
 
     // READ

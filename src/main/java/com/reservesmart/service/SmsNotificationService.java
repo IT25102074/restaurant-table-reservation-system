@@ -6,6 +6,9 @@ import com.reservesmart.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 
 /**
  * OOP: INHERITANCE — Uses SmsNotification (extends Notification).
@@ -41,10 +44,9 @@ public class SmsNotificationService {
         }
 
         if (twilioEnabled) {
-            // Uncomment after adding Twilio SDK to pom.xml:
-            // Twilio.init(accountSid, authToken);
-            // Message.creator(new PhoneNumber("+94" + toPhone),
-            //     new PhoneNumber(twilioPhone), message).create();
+            Twilio.init(accountSid, authToken);
+            Message.creator(new PhoneNumber("+94" + toPhone),
+                new PhoneNumber(twilioPhone), message).create();
             System.out.println("[SMS TWILIO] To: " + toPhone + " | " + message);
         } else {
             System.out.println("[SMS MOCK] To: " + toPhone + " | " + message);
