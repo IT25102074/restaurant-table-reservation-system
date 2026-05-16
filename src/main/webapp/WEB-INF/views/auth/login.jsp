@@ -78,8 +78,8 @@
     <form action="/login" method="post" class="space-y-5">
 
         <div>
-            <label class="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
-            <input type="email" name="email" required placeholder="you@example.com"
+            <label class="block text-sm font-medium text-slate-300 mb-1.5">Email or Phone Number</label>
+            <input type="text" name="emailOrPhone" required placeholder="you@example.com or 0771234567"
                    class="w-full input-dark rounded-xl px-4 py-3 text-sm"/>
         </div>
 

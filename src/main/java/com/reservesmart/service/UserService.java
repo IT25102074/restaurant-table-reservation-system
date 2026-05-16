@@ -82,22 +82,23 @@ public class UserService {
     /**
      * Validates login credentials.
      */
-    public User login(String email, String password) {
+    public User login(String emailOrPhone, String password) {
 
-        Optional<User> userOpt = userRepository.findByEmail(email);
+        Optional<User> userOpt = userRepository.findByEmailOrPhone(emailOrPhone, emailOrPhone);
 
         if (userOpt.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "No account found with that email.");
+            throw new IllegalArgumentException("Invalid email or password.");
         }
 
         User user = userOpt.get();
 
         // Plain-text password check
-
         if (!user.getPassword().equals(password)) {
-            throw new IllegalArgumentException("Incorrect password.");
+            throw new IllegalArgumentException("Invalid email or password.");
         }
+
+        // Trigger the OOP login method (which currently logs to console)
+        user.login();
 
         return user;
     }

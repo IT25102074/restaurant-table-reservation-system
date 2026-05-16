@@ -33,12 +33,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String loginSubmit(@RequestParam String email,
+    public String loginSubmit(@RequestParam String emailOrPhone,
                               @RequestParam String password,
                               HttpSession session,
                               RedirectAttributes redirectAttributes) {
         try {
-            User user = userService.login(email, password);
+            User user = userService.login(emailOrPhone, password);
 
             // Store user in session
             session.setAttribute("loggedInUser", user);
