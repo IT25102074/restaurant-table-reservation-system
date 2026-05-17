@@ -36,7 +36,7 @@
     <div class="glass rounded-2xl p-6" style="border:1px solid rgba(220,38,38,0.1);">
         <h3 class="font-semibold mb-2" style="color:#dc2626;">⚠️ Danger Zone</h3>
         <p class="text-sm mb-4" style="color:var(--text-muted);">Deleting your account is permanent and cannot be undone.</p>
-        <form action="/profile/delete" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
+        <form action="/profile/delete" method="post">
             <button type="submit" class="text-sm font-semibold px-5 py-2.5 rounded-xl transition" style="background:rgba(220,38,38,0.06);color:#dc2626;border:1px solid rgba(220,38,38,0.12);">Delete My Account</button>
         </form>
     </div>

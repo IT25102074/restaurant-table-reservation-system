@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReserveSmart — Table Reservation System</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -259,12 +260,183 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* ─── Empty States (#7) ─── */
+        .empty-state {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: 4rem 2rem; text-align: center;
+            background: #fff; border-radius: 20px;
+            border: 1px solid rgba(29,29,27,0.07);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+        }
+        .empty-state svg { margin-bottom: 1.25rem; opacity: 0.85; }
+        .empty-state .es-title {
+            font-size: 1.05rem; font-weight: 700; color: #1d1d1b;
+            margin-bottom: 0.4rem; letter-spacing: -0.01em;
+        }
+        .empty-state .es-sub {
+            font-size: 0.82rem; color: #9a8d82; margin-bottom: 1.5rem; line-height: 1.5;
+        }
+        .empty-state .es-cta {
+            display: inline-block; padding: 0.6rem 1.4rem;
+            background: linear-gradient(135deg, #8B5E3C, #C4956A);
+            color: #fff; border-radius: 10px; font-size: 0.83rem;
+            font-weight: 700; text-decoration: none; transition: all 0.25s;
+        }
+        .empty-state .es-cta:hover {
+            box-shadow: 0 4px 16px rgba(139,94,60,0.25); transform: translateY(-1px);
+        }
+
+        /* ─── Staggered card animations (#2) ─── */
+        .stagger-list > * {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: staggerFadeUp 0.45s ease-out forwards;
+        }
+        .stagger-list > *:nth-child(1) { animation-delay: 0.05s; }
+        .stagger-list > *:nth-child(2) { animation-delay: 0.10s; }
+        .stagger-list > *:nth-child(3) { animation-delay: 0.15s; }
+        .stagger-list > *:nth-child(4) { animation-delay: 0.20s; }
+        .stagger-list > *:nth-child(5) { animation-delay: 0.25s; }
+        .stagger-list > *:nth-child(6) { animation-delay: 0.30s; }
+        .stagger-list > *:nth-child(n+7) { animation-delay: 0.35s; }
+        @keyframes staggerFadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── Consistent page header (#4) ─── */
+        .page-title-bar {
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid rgba(29,29,27,0.07);
+            padding: 1.4rem 1.75rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+        .page-title-bar .ptb-eyebrow {
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; color: #9a8d82; margin-bottom: 0.2rem;
+        }
+        .page-title-bar h1 {
+            font-size: 1.45rem; font-weight: 800; color: #1d1d1b;
+            letter-spacing: -0.02em; line-height: 1.2;
+        }
+        .page-title-bar .ptb-sub {
+            font-size: 0.82rem; color: #6b5e54; margin-top: 0.2rem;
+        }
+
+        /* ─── Toast notifications (#1) ─── */
+        #toast-container {
+            position: fixed; top: 1.25rem; right: 1.25rem;
+            z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem;
+            pointer-events: none;
+        }
+        .toast {
+            pointer-events: all;
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.85rem 1.1rem;
+            border-radius: 12px;
+            font-size: 0.875rem; font-weight: 500;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border: 1px solid transparent;
+            background: #fff;
+            min-width: 280px; max-width: 360px;
+            animation: toastIn 0.35s cubic-bezier(.22,.68,0,1.2) both;
+        }
+        .toast.toast-out { animation: toastOut 0.3s ease forwards; }
+        .toast-success { color: #16a34a; border-color: rgba(22,163,74,0.2); border-left: 3px solid #16a34a; }
+        .toast-error   { color: #dc2626; border-color: rgba(220,38,38,0.2); border-left: 3px solid #dc2626; }
+        .toast-info    { color: #2563eb; border-color: rgba(37,99,235,0.2); border-left: 3px solid #2563eb; }
+        .toast-close { margin-left: auto; cursor: pointer; opacity: 0.5; font-size: 1rem; line-height: 1; flex-shrink: 0; }
+        .toast-close:hover { opacity: 1; }
+        @keyframes toastIn  { from { opacity:0; transform: translateX(40px); } to { opacity:1; transform: translateX(0); } }
+        @keyframes toastOut { from { opacity:1; transform: translateX(0); }  to { opacity:0; transform: translateX(40px); } }
+
+        /* ─── Notification dropdown (#8) ─── */
+        .notif-dropdown {
+            display: none;
+            position: absolute; top: calc(100% + 12px); right: 0;
+            width: 340px;
+            background: #fff;
+            border: 1px solid rgba(29,29,27,0.09);
+            border-radius: 16px;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+            z-index: 1000;
+            overflow: hidden;
+            animation: dropdownIn 0.2s ease;
+        }
+        .notif-dropdown.open { display: block; }
+        @keyframes dropdownIn { from { opacity:0; transform: translateY(-8px); } to { opacity:1; transform: translateY(0); } }
+        .notif-header { padding: 0.85rem 1rem; border-bottom: 1px solid rgba(29,29,27,0.07); display:flex; justify-content:space-between; align-items:center; }
+        .notif-header span { font-size: 0.82rem; font-weight: 700; color: #1d1d1b; }
+        .notif-header a { font-size: 0.75rem; color: #8B5E3C; font-weight: 600; text-decoration:none; }
+        .notif-item { padding: 0.75rem 1rem; border-bottom: 1px solid rgba(29,29,27,0.05); display:flex; gap: 0.6rem; align-items:flex-start; }
+        .notif-item:last-child { border-bottom: none; }
+        .notif-item.unread { background: rgba(139,94,60,0.03); }
+        .notif-item-dot { width: 7px; height: 7px; border-radius: 50%; background: #8B5E3C; flex-shrink:0; margin-top: 5px; animation: pulse 2s infinite; }
+        .notif-item-msg { font-size: 0.78rem; color: #3d3530; line-height: 1.4; }
+        .notif-item-time { font-size: 0.68rem; color: #9a8d82; margin-top: 2px; }
+        .notif-footer { padding: 0.65rem 1rem; text-align:center; border-top: 1px solid rgba(29,29,27,0.06); }
+        .notif-footer a { font-size: 0.78rem; color: #8B5E3C; font-weight: 600; text-decoration:none; }
+
+        /* ─── Mobile nav (#mobile) ─── */
+        #mobile-menu { display: none; }
+        @media (max-width: 768px) {
+            #desktop-nav { display: none; }
+            #mobile-menu-btn { display: flex; }
+            #mobile-menu.open { display: flex; flex-direction: column; }
+        }
+        #mobile-menu-btn { display: none; cursor: pointer; flex-direction: column; gap: 5px; padding: 4px; }
+        #mobile-menu-btn span { display:block; width:22px; height:2px; background: var(--accent); border-radius:2px; transition: all 0.3s; }
+        #mobile-menu {
+            position: absolute; top: 100%; left: 0; right: 0;
+            background: rgba(255,248,242,0.98); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1rem 1.5rem; gap: 0.85rem;
+            z-index: 49;
+        }
+        #mobile-menu a { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); padding: 0.3rem 0; border-bottom: 1px solid var(--border-light); }
+
+        /* ─── Mobile table collapse (#7) ─── */
+        @media (max-width: 640px) {
+            .mobile-card-table thead { display: none; }
+            .mobile-card-table tr {
+                display: block;
+                border: 1px solid var(--border-light);
+                border-radius: 12px;
+                margin-bottom: 0.75rem;
+                padding: 0.75rem;
+                background: #fff;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            }
+            .mobile-card-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.35rem 0.25rem;
+                border: none;
+                font-size: 0.82rem;
+            }
+            .mobile-card-table td::before {
+                content: attr(data-label);
+                font-size: 0.7rem; font-weight: 700;
+                text-transform: uppercase; letter-spacing: 0.06em;
+                color: #9a8d82; flex-shrink: 0; margin-right: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col" style="color: #1d1d1b;">
 
+<!-- Toast Container (#1) -->
+<div id="toast-container"></div>
+
 <!-- Navbar -->
-<nav class="glass-strong sticky top-0 z-50 px-6 py-3.5 flex items-center justify-between">
+<nav class="glass-strong sticky top-0 z-50 px-6 py-3.5" style="position:relative;">
+    <div class="flex items-center justify-between">
 
     <!-- Logo -->
     <a href="/" class="flex items-center gap-2 group">
@@ -273,8 +445,8 @@
         </span>
     </a>
 
-    <!-- Nav Links -->
-    <div class="flex items-center gap-5">
+    <!-- Desktop Nav Links -->
+    <div id="desktop-nav" class="flex items-center gap-5">
 
         <!-- CUSTOMER NAV -->
         <c:if test="${sessionScope.userRole == 'CUSTOMER'}">
@@ -284,18 +456,45 @@
             <a href="/customer/special-requests" class="nav-link-modern text-sm font-medium">Special Requests</a>
             <a href="/feedback/my" class="nav-link-modern text-sm font-medium">Feedback</a>
 
-            <!-- Notification bell -->
-            <a href="/customer/notifications"
-               class="relative nav-link-modern text-sm font-medium">
-                🔔
+            <!-- Notification bell with dropdown (#8) -->
+            <div class="relative" id="notif-bell-wrapper">
+                <button onclick="toggleNotifDropdown()"
+                        class="relative flex items-center justify-center w-9 h-9 rounded-xl transition-all duration-200"
+                        style="background: rgba(139,94,60,0.06); border: 1px solid rgba(139,94,60,0.12); color: var(--accent); cursor:pointer;"
+                        aria-label="Notifications">
+                    <i data-lucide="bell" style="width:18px;height:18px;stroke-width:2;"></i>
+                    <c:if test="${not empty sessionScope.unreadCount && sessionScope.unreadCount > 0}">
+                        <!-- Pulsing red dot -->
+                        <span style="position:absolute; top:-3px; right:-3px;
+                                     width:9px; height:9px; border-radius:50%;
+                                     background:#dc2626; border:2px solid #FFF8F2;
+                                     animation: pulse 1.5s infinite;"></span>
+                    </c:if>
+                </button>
+                <!-- Count badge below dot, visible if > 1 -->
                 <c:if test="${not empty sessionScope.unreadCount && sessionScope.unreadCount > 0}">
-                    <span class="absolute -top-1.5 -right-2.5 text-white text-[10px]
-                                 rounded-full w-4 h-4 flex items-center justify-center leading-none pulse-dot"
-                          style="background: #dc2626;">
+                    <span style="position:absolute; top:-6px; right:-8px;
+                                 background:#dc2626; color:#fff;
+                                 font-size:0.58rem; font-weight:800; line-height:1;
+                                 border-radius:99px; padding:2px 5px;
+                                 border:1.5px solid #FFF8F2;
+                                 animation: pulse 1.5s infinite;">
                         ${sessionScope.unreadCount}
                     </span>
                 </c:if>
-            </a>
+                <div class="notif-dropdown" id="notif-dropdown">
+                    <div class="notif-header">
+                        <span>Notifications</span>
+                        <a href="/customer/notifications">View All</a>
+                    </div>
+                    <div id="notif-preview-list">
+                        <div style="padding:1.5rem;text-align:center;color:#9a8d82;font-size:0.8rem;">Loading...</div>
+                    </div>
+                    <div class="notif-footer">
+                        <a href="/customer/notifications">Open Notification Center →</a>
+                    </div>
+                </div>
+            </div>
 
             <a href="/profile" class="nav-link-modern text-sm font-medium">Profile</a>
         </c:if>
@@ -339,6 +538,40 @@
         </c:if>
 
     </div>
+
+    <!-- Mobile menu button -->
+    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu">
+        <c:if test="${sessionScope.userRole == 'CUSTOMER'}">
+            <a href="/customer/dashboard">Dashboard</a>
+            <a href="/reservations/new">Book Table</a>
+            <a href="/reservations/my">My Reservations</a>
+            <a href="/customer/special-requests">Special Requests</a>
+            <a href="/feedback/my">Feedback</a>
+            <a href="/customer/notifications">Notifications</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout" style="color:#dc2626;">Logout</a>
+        </c:if>
+        <c:if test="${sessionScope.userRole == 'ADMIN'}">
+            <a href="/admin/dashboard">Dashboard</a>
+            <a href="/admin/users">Users</a>
+            <a href="/admin/tables">Tables</a>
+            <a href="/reservations/admin/list">Reservations</a>
+            <a href="/admin/special-requests">Special Requests</a>
+            <a href="/feedback/admin/list">Feedback</a>
+            <a href="/logout" style="color:#dc2626;">Logout</a>
+        </c:if>
+        <c:if test="${empty sessionScope.loggedInUser}">
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </c:if>
+    </div>
 </nav>
 
 <!-- Page content wrapper -->
@@ -359,3 +592,68 @@
         </div>
     </c:if>
 </div>
+
+<script>
+// ─── Toast System (#1) ───────────────────────────────────────────
+function showToast(message, type = 'success') {
+    const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    toast.innerHTML = '<span>' + icons[type] + '</span><span style="flex:1">' + message + '</span><span class="toast-close" onclick="dismissToast(this.parentElement)">✕</span>';
+    container.appendChild(toast);
+    setTimeout(() => dismissToast(toast), 3500);
+}
+function dismissToast(el) {
+    if (!el || !el.parentElement) return;
+    el.classList.add('toast-out');
+    setTimeout(() => el.remove(), 300);
+}
+
+// ─── Mobile menu (#mobile) ───────────────────────────────────────
+function toggleMobileMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+// ─── Notification dropdown (#8) ─────────────────────────────────
+function toggleNotifDropdown() {
+    const dd = document.getElementById('notif-dropdown');
+    if (!dd) return;
+    dd.classList.toggle('open');
+    if (dd.classList.contains('open')) loadNotifPreview();
+}
+document.addEventListener('click', function(e) {
+    const wrapper = document.getElementById('notif-bell-wrapper');
+    if (wrapper && !wrapper.contains(e.target)) {
+        const dd = document.getElementById('notif-dropdown');
+        if (dd) dd.classList.remove('open');
+    }
+});
+async function loadNotifPreview() {
+    const list = document.getElementById('notif-preview-list');
+    if (!list) return;
+    try {
+        const res = await fetch('/customer/notifications/recent', { credentials: 'same-origin' });
+        if (!res.ok) { list.innerHTML = '<div style="padding:1rem;text-align:center;color:#9a8d82;font-size:0.8rem;">No notifications.</div>'; return; }
+        const data = await res.json();
+        if (!data || data.length === 0) {
+            list.innerHTML = '<div style="padding:1.25rem;text-align:center;color:#9a8d82;font-size:0.8rem;">🔕 No new notifications.</div>';
+            return;
+        }
+        list.innerHTML = data.slice(0, 5).map(n => {
+            const unread = n.status === 'UNREAD';
+            return '<div class="notif-item ' + (unread ? 'unread' : '') + '">' +
+                (unread ? '<div class="notif-item-dot"></div>' : '<div style="width:7px;flex-shrink:0;"></div>') +
+                '<div><div class="notif-item-msg">' + n.message + '</div>' +
+                '<div class="notif-item-time">' + new Date(n.createdAt).toLocaleDateString() + '</div></div>' +
+                '</div>';
+        }).join('');
+    } catch(e) {
+        list.innerHTML = '<div style="padding:1rem;text-align:center;color:#9a8d82;font-size:0.8rem;">Could not load notifications.</div>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+});
+</script>

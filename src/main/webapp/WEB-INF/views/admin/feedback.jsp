@@ -44,7 +44,7 @@
                                 <p class="text-xs mt-2" style="color:#b0a59a;">${f.createdAt}</p>
                             </div>
                             <div class="flex-shrink-0">
-                                <form action="/feedback/delete/${f.feedbackId}" method="post" onsubmit="return confirm('Delete this feedback?')">
+                                <form action="/feedback/delete/${f.feedbackId}" method="post">
                                     <button type="submit" class="text-xs px-3 py-1.5 rounded-lg transition" style="background:rgba(220,38,38,0.05);color:#dc2626;border:1px solid rgba(220,38,38,0.12);">Delete</button>
                                 </form>
                             </div>

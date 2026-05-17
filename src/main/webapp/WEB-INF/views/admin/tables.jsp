@@ -75,7 +75,7 @@
                                         <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium ${t.status=='AVAILABLE'?'bg-green-500/15 text-green-400 border border-green-500/20':t.status=='RESERVED'?'bg-amber-500/15 text-amber-400 border border-amber-500/20':'bg-slate-500/15 text-slate-400'}">${t.status}</span></td>
                                         <td class="px-4 py-3 flex gap-2">
                                             <a href="/admin/tables/edit/${t.tableId}" class="text-xs px-3 py-1.5 rounded-lg transition" style="background:rgba(37,99,235,0.06);color:#2563eb;border:1px solid rgba(37,99,235,0.1);">Edit</a>
-                                            <form action="/admin/tables/delete/${t.tableId}" method="post" onsubmit="return confirm('Delete table ${t.tableNumber}?')">
+                                            <form action="/admin/tables/delete/${t.tableId}" method="post">
                                                 <button type="submit" class="text-xs px-3 py-1.5 rounded-lg transition" style="background:rgba(220,38,38,0.05);color:#dc2626;border:1px solid rgba(220,38,38,0.12);">Delete</button>
                                             </form>
                                         </td>

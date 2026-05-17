@@ -37,7 +37,7 @@
                                     <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full font-medium ${u.role == 'ADMIN' ? '' : ''}" style="${u.role == 'ADMIN' ? 'background:#1d1d1b;color:#EFDACC;' : 'background:rgba(139,94,60,0.1);color:var(--accent);'}">${u.role}</span></td>
                                     <td class="px-4 py-3 text-xs" style="color:#b0a59a;">${u.createdAt}</td>
                                     <td class="px-4 py-3">
-                                        <form action="/admin/users/delete/${u.userId}" method="post" onsubmit="return confirm('Delete user ${u.fullName}?')">
+                                        <form action="/admin/users/delete/${u.userId}" method="post">
                                             <button type="submit" class="text-xs px-3 py-1.5 rounded-lg transition" style="background:rgba(220,38,38,0.05);color:#dc2626;border:1px solid rgba(220,38,38,0.12);">Delete</button>
                                         </form>
                                     </td>

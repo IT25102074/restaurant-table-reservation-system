@@ -75,18 +75,18 @@
     }
 
     async function acceptRequest(id) {
-        if (!confirm('Accept this request?')) return;
         try {
             const r = await fetch('/api/SpecialRequest/' + id + '/accept', { method: 'PATCH' });
-            if (r.ok) { alert('Accepted!'); loadAllRequests(); } else { alert('Failed.'); }
+            if (r.ok) { showToast('Request accepted.', 'success'); loadAllRequests(); }
+            else { showToast('Failed to accept request.', 'error'); }
         } catch (e) { console.error(e); }
     }
 
     async function rejectRequest(id) {
-        if (!confirm('Reject this request?')) return;
         try {
             const r = await fetch('/api/SpecialRequest/' + id + '/reject', { method: 'PATCH' });
-            if (r.ok) { alert('Rejected!'); loadAllRequests(); } else { alert('Failed.'); }
+            if (r.ok) { showToast('Request rejected.', 'info'); loadAllRequests(); }
+            else { showToast('Failed to reject request.', 'error'); }
         } catch (e) { console.error(e); }
     }
 </script>

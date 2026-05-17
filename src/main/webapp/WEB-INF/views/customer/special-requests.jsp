@@ -111,11 +111,11 @@
     }
 
     async function deleteRequest(id) {
-        if (!confirm("Delete this request?")) return;
         try {
             const response = await fetch('/api/SpecialRequest/' + id, { method: 'DELETE' });
-            if (response.ok) { alert("Deleted!"); loadRequests(); } else { alert("Failed to delete."); }
-        } catch (error) { console.error("Error:", error); }
+            if (response.ok) { showToast('Request deleted.', 'success'); loadRequests(); }
+            else { showToast('Failed to delete request.', 'error'); }
+        } catch (error) { console.error('Error:', error); showToast('Error deleting request.', 'error'); }
     }
 </script>
 
