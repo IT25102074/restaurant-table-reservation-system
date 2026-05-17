@@ -31,3 +31,22 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### OS Files ###
+.DS_Store
+Thumbs.db
+desktop.ini
+
+### Logs ###
+*.log
+logs/
+
+### Environment Variables ###
+.env
+*.env
+.env.local
+.env.*.local
+
+### Java Crash Reports ###
+hs_err_pid*
+replay_pid*
