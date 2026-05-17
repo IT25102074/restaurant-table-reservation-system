@@ -65,18 +65,18 @@
                     statusBadge = '<span style="background:rgba(202,138,4,0.08);color:#ca8a04;border:1px solid rgba(202,138,4,0.12);" class="px-2 py-1 rounded-full text-xs">Pending</span>';
                 }
                 container.innerHTML += `
-                    <div class="glass rounded-2xl p-6 card-hover" id="req-card-${req.id}">
+                    <div class="glass rounded-2xl p-6 card-hover" id="req-card-\${req.id}">
                         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                             <div>
-                                <h4 class="font-bold mb-2" style="color:var(--text-primary);">Request #${req.id} (Reservation #${req.reservationId}) ${statusBadge}</h4>
+                                <h4 class="font-bold mb-2" style="color:var(--text-primary);">Request #\${req.id} (Reservation #\${req.reservationId}) \${statusBadge}</h4>
                                 <div class="p-3 rounded-lg text-sm" style="background:rgba(139,94,60,0.03);border:1px solid var(--border-light);color:var(--text-primary);">
                                     <span style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#9a8d82;">Your Request</span><br/>
-                                    "${req.response != null ? req.response : '(no text saved)'}"
+                                    "\${req.response != null ? req.response : '(no text saved)'}"
                                 </div>
-                                <p class="text-xs mt-2" style="color:var(--text-muted);">Submitted: ${dateStr}</p>
+                                <p class="text-xs mt-2" style="color:var(--text-muted);">Submitted: \${dateStr}</p>
                             </div>
                             <div class="flex gap-2 flex-shrink-0 mt-3 sm:mt-0">
-                                <button onclick="deleteRequest(${req.id})" class="text-sm px-4 py-2 rounded-xl transition font-medium" style="background:rgba(220,38,38,0.05);color:#dc2626;border:1px solid rgba(220,38,38,0.12);">Delete</button>
+                                <button onclick="deleteRequest(\${req.id})" class="text-sm px-4 py-2 rounded-xl transition font-medium" style="background:rgba(220,38,38,0.05);color:#dc2626;border:1px solid rgba(220,38,38,0.12);">Delete</button>
                             </div>
                         </div>
                     </div>`;

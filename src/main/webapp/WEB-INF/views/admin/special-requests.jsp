@@ -55,19 +55,19 @@
                 } else {
                     statusHtml = '<span style="background:rgba(202,138,4,0.08);color:#ca8a04;border:1px solid rgba(202,138,4,0.12);" class="px-2 py-1 rounded-full text-xs">Pending</span>';
                     actionHtml = `
-                        <button onclick="acceptRequest(${req.id})" class="text-xs px-3 py-1.5 rounded-lg transition mr-1" style="background:rgba(22,163,74,0.06);color:#16a34a;border:1px solid rgba(22,163,74,0.15);">Accept</button>
-                        <button onclick="rejectRequest(${req.id})" class="text-xs px-3 py-1.5 rounded-lg transition" style="background:rgba(220,38,38,0.05);color:#dc2626;border:1px solid rgba(220,38,38,0.12);">Reject</button>
+                        <button onclick="acceptRequest(\${req.id})" class="text-xs px-3 py-1.5 rounded-lg transition mr-1" style="background:rgba(22,163,74,0.06);color:#16a34a;border:1px solid rgba(22,163,74,0.15);">Accept</button>
+                        <button onclick="rejectRequest(\${req.id})" class="text-xs px-3 py-1.5 rounded-lg transition" style="background:rgba(220,38,38,0.05);color:#dc2626;border:1px solid rgba(220,38,38,0.12);">Reject</button>
                     `;
                 }
                 tbody.innerHTML += `
                     <tr style="border-top:1px solid var(--border-light);">
-                        <td class="px-6 py-4 font-medium" style="color:var(--text-primary);">#${req.id}</td>
-                        <td class="px-6 py-4" style="color:var(--text-secondary);">${req.customerID}</td>
-                        <td class="px-6 py-4" style="color:var(--text-secondary);">${req.reservationId}</td>
-                        <td class="px-6 py-4 max-w-xs truncate" style="color:var(--text-primary);" title="${req.response}">${req.response}</td>
-                        <td class="px-6 py-4" style="color:var(--text-secondary);">${dateStr}</td>
-                        <td class="px-6 py-4">${statusHtml}</td>
-                        <td class="px-6 py-4 text-right whitespace-nowrap">${actionHtml}</td>
+                        <td class="px-6 py-4 font-medium" style="color:var(--text-primary);">#\${req.id}</td>
+                        <td class="px-6 py-4" style="color:var(--text-secondary);">\${req.customerID}</td>
+                        <td class="px-6 py-4" style="color:var(--text-secondary);">\${req.reservationId}</td>
+                        <td class="px-6 py-4 max-w-xs truncate" style="color:var(--text-primary);" title="\${req.response}">\${req.response}</td>
+                        <td class="px-6 py-4" style="color:var(--text-secondary);">\${dateStr}</td>
+                        <td class="px-6 py-4">\${statusHtml}</td>
+                        <td class="px-6 py-4 text-right whitespace-nowrap">\${actionHtml}</td>
                     </tr>
                 `;
             });
