@@ -22,7 +22,7 @@ public class NotificationController {
     @GetMapping
     public String viewNotifications(HttpSession session, Model model) {
         User loggedIn = (User) session.getAttribute("loggedInUser");
-        if (loggedIn == null || !"CUSTOMER".equals(loggedIn.getRole())) {
+        if (loggedIn == null) {
             return "redirect:/login";
         }
 
@@ -33,6 +33,15 @@ public class NotificationController {
         model.addAttribute("notifications", notifications);
         model.addAttribute("unreadCount", unreadCount);
         return "customer/notifications";
+    }
+
+    @GetMapping("/recent")
+    @ResponseBody
+    public List<Notification> getRecentNotifications(HttpSession session) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null) return List.of();
+        List<Notification> notifications = notificationService.getUserNotifications(loggedIn.getUserId());
+        return notifications.stream().limit(5).toList();
     }
 
     @PostMapping("/read/{id}")

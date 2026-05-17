@@ -456,45 +456,6 @@
             <a href="/customer/special-requests" class="nav-link-modern text-sm font-medium">Special Requests</a>
             <a href="/feedback/my" class="nav-link-modern text-sm font-medium">Feedback</a>
 
-            <!-- Notification bell with dropdown (#8) -->
-            <div class="relative" id="notif-bell-wrapper">
-                <button onclick="toggleNotifDropdown()"
-                        class="relative flex items-center justify-center w-9 h-9 rounded-xl transition-all duration-200"
-                        style="background: rgba(139,94,60,0.06); border: 1px solid rgba(139,94,60,0.12); color: var(--accent); cursor:pointer;"
-                        aria-label="Notifications">
-                    <i data-lucide="bell" style="width:18px;height:18px;stroke-width:2;"></i>
-                    <c:if test="${not empty sessionScope.unreadCount && sessionScope.unreadCount > 0}">
-                        <!-- Pulsing red dot -->
-                        <span style="position:absolute; top:-3px; right:-3px;
-                                     width:9px; height:9px; border-radius:50%;
-                                     background:#dc2626; border:2px solid #FFF8F2;
-                                     animation: pulse 1.5s infinite;"></span>
-                    </c:if>
-                </button>
-                <!-- Count badge below dot, visible if > 1 -->
-                <c:if test="${not empty sessionScope.unreadCount && sessionScope.unreadCount > 0}">
-                    <span style="position:absolute; top:-6px; right:-8px;
-                                 background:#dc2626; color:#fff;
-                                 font-size:0.58rem; font-weight:800; line-height:1;
-                                 border-radius:99px; padding:2px 5px;
-                                 border:1.5px solid #FFF8F2;
-                                 animation: pulse 1.5s infinite;">
-                        ${sessionScope.unreadCount}
-                    </span>
-                </c:if>
-                <div class="notif-dropdown" id="notif-dropdown">
-                    <div class="notif-header">
-                        <span>Notifications</span>
-                        <a href="/customer/notifications">View All</a>
-                    </div>
-                    <div id="notif-preview-list">
-                        <div style="padding:1.5rem;text-align:center;color:#9a8d82;font-size:0.8rem;">Loading...</div>
-                    </div>
-                    <div class="notif-footer">
-                        <a href="/customer/notifications">Open Notification Center →</a>
-                    </div>
-                </div>
-            </div>
 
             <a href="/profile" class="nav-link-modern text-sm font-medium">Profile</a>
         </c:if>
@@ -512,6 +473,46 @@
         <!-- USER INFO + LOGOUT -->
         <c:if test="${not empty sessionScope.loggedInUser}">
             <div class="flex items-center gap-3 ml-2 pl-4" style="border-left: 1px solid var(--border-light);">
+                <!-- Notification bell with dropdown (#8) -->
+                <div class="relative mr-2" id="notif-bell-wrapper">
+                    <button onclick="toggleNotifDropdown()"
+                            class="relative flex items-center justify-center w-9 h-9 rounded-xl transition-all duration-200"
+                            style="background: rgba(139,94,60,0.06); border: 1px solid rgba(139,94,60,0.12); color: var(--accent); cursor:pointer;"
+                            aria-label="Notifications">
+                        <i data-lucide="bell" style="width:18px;height:18px;stroke-width:2;"></i>
+                        <c:if test="${not empty sessionScope.unreadCount && sessionScope.unreadCount > 0}">
+                            <!-- Pulsing red dot -->
+                            <span style="position:absolute; top:-3px; right:-3px;
+                                         width:9px; height:9px; border-radius:50%;
+                                         background:#dc2626; border:2px solid #FFF8F2;
+                                         animation: pulse 1.5s infinite;"></span>
+                        </c:if>
+                    </button>
+                    <!-- Count badge below dot, visible if > 1 -->
+                    <c:if test="${not empty sessionScope.unreadCount && sessionScope.unreadCount > 0}">
+                        <span style="position:absolute; top:-6px; right:-8px;
+                                     background:#dc2626; color:#fff;
+                                     font-size:0.58rem; font-weight:800; line-height:1;
+                                     border-radius:99px; padding:2px 5px;
+                                     border:1.5px solid #FFF8F2;
+                                     animation: pulse 1.5s infinite;">
+                            ${sessionScope.unreadCount}
+                        </span>
+                    </c:if>
+                    <div class="notif-dropdown" id="notif-dropdown">
+                        <div class="notif-header">
+                            <span>Notifications</span>
+                            <a href="/customer/notifications">View All</a>
+                        </div>
+                        <div id="notif-preview-list">
+                            <div style="padding:1.5rem;text-align:center;color:#9a8d82;font-size:0.8rem;">Loading...</div>
+                        </div>
+                        <div class="notif-footer">
+                            <a href="/customer/notifications">Open Notification Center →</a>
+                        </div>
+                    </div>
+                </div>
+
                 <span class="text-sm" style="color: var(--text-muted);">
                     <strong style="color: var(--text-primary);">${sessionScope.userName}</strong>
                     <span class="ml-1.5 text-[10px] font-semibold uppercase tracking-wider
