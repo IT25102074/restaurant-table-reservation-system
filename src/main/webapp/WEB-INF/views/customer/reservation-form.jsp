@@ -4,7 +4,7 @@
 
 <div class="max-w-xl mx-auto px-4 py-10 fade-in">
 
-    <h2 class="text-2xl font-bold text-slate-100 mb-6">
+    <h2 class="text-2xl font-bold mb-6" style="color: var(--text-primary);">
         <c:choose>
             <c:when test="${not empty reservation}">✏️ Edit Reservation</c:when>
             <c:otherwise>📅 Make a Reservation</c:otherwise>
@@ -12,7 +12,7 @@
     </h2>
 
     <c:if test="${not empty errorMessage}">
-        <div class="glass border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-4 text-sm">
+        <div class="glass px-4 py-3 rounded-xl mb-4 text-sm" style="border-left: 3px solid #dc2626; color: #dc2626;">
             ❌ ${errorMessage}
         </div>
     </c:if>
@@ -24,7 +24,7 @@
             <form action="/reservations/create" method="post" class="space-y-5">
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Select Table</label>
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-primary);">Select Table</label>
                     <select name="tableId" required class="w-full input-dark rounded-xl px-4 py-3 text-sm">
                         <option value="">-- Choose a table --</option>
                         <c:forEach var="t" items="${tables}">
@@ -36,19 +36,19 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Date</label>
-                    <input type="date" name="reservationDate" required min="${java.time.LocalDate.now()}"
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-primary);">Date</label>
+                    <input type="date" name="reservationDate" required min="${today}"
                            class="w-full input-dark rounded-xl px-4 py-3 text-sm"/>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Time</label>
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-primary);">Time</label>
                     <input type="time" name="reservationTime" required
                            class="w-full input-dark rounded-xl px-4 py-3 text-sm"/>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Number of Guests</label>
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-primary);">Number of Guests</label>
                     <input type="number" name="guestCount" required min="1" value="${preSelectedGuests}"
                            placeholder="e.g. 3" class="w-full input-dark rounded-xl px-4 py-3 text-sm"/>
                 </div>
@@ -64,37 +64,37 @@
             <form action="/reservations/update/${reservation.reservationId}" method="post" class="space-y-5">
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Table</label>
-                    <div class="w-full input-dark rounded-xl px-4 py-3 text-sm text-slate-400">
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-primary);">Table</label>
+                    <div class="w-full input-dark rounded-xl px-4 py-3 text-sm" style="color: var(--text-secondary);">
                         Table ${reservation.table.tableNumber} —
                         ${reservation.table.capacity} pax — ${reservation.table.location}
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Date</label>
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-primary);">Date</label>
                     <input type="date" name="reservationDate" required value="${reservation.reservationDate}"
                            class="w-full input-dark rounded-xl px-4 py-3 text-sm"/>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Time</label>
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-primary);">Time</label>
                     <input type="time" name="reservationTime" required value="${reservation.reservationTime}"
                            class="w-full input-dark rounded-xl px-4 py-3 text-sm"/>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Number of Guests</label>
+                    <label class="block text-sm font-medium mb-1.5" style="color: var(--text-primary);">Number of Guests</label>
                     <input type="number" name="guestCount" required min="1" value="${reservation.guestCount}"
                            class="w-full input-dark rounded-xl px-4 py-3 text-sm"/>
                 </div>
 
                 <button type="submit"
-                        class="w-full bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border border-blue-500/30
-                               font-semibold py-3 rounded-xl transition text-sm">
+                        class="w-full font-semibold py-3 rounded-xl transition text-sm"
+                        style="background: rgba(37,99,235,0.06); color: #2563eb; border: 1px solid rgba(37,99,235,0.15);">
                     Save Changes
                 </button>
-                <a href="/reservations/my" class="block text-center text-sm text-slate-500 hover:text-slate-300 mt-1 transition">
+                <a href="/reservations/my" class="block text-center text-sm mt-1 transition" style="color: var(--text-muted);">
                     Cancel
                 </a>
             </form>

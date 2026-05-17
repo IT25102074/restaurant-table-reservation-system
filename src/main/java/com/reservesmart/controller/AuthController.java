@@ -101,7 +101,7 @@ public class AuthController {
             User user = (User) session.getAttribute("loggedInUser");
             return "redirect:" + user.getDashboardUrl();
         }
-        return "redirect:/login";
+        return "index";
     }
 
     // Forgot Password

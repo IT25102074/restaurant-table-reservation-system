@@ -5,50 +5,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Password — ReserveSmart</title>
+    <title>Reset Password — Flor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { font-family: 'Inter', sans-serif; }
-        body {
-            background: #0f172a;
-            background-image:
-                radial-gradient(ellipse at 30% 0%, rgba(245,158,11,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 100%, rgba(239,68,68,0.06) 0%, transparent 50%);
-        }
-        .glass-card { background: rgba(30,41,59,0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
-        .input-dark { background: rgba(15,23,42,0.6); border: 1px solid rgba(255,255,255,0.1); color: #f1f5f9; transition: all 0.3s; }
-        .input-dark:focus { border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.15); outline: none; }
-        .input-dark::placeholder { color: #64748b; }
-        .btn-gradient { background: linear-gradient(135deg, #f59e0b, #ef4444); transition: all 0.3s; }
-        .btn-gradient:hover { box-shadow: 0 4px 20px rgba(245,158,11,0.4); transform: translateY(-1px); }
+        body { background: #EFDACC; background-image: radial-gradient(ellipse at 30% 0%, rgba(139,94,60,0.06) 0%, transparent 50%), radial-gradient(ellipse at 70% 100%, rgba(196,149,106,0.08) 0%, transparent 50%); }
+        .auth-card { background: #FFFFFF; border: 1px solid rgba(29,29,27,0.06); box-shadow: 0 8px 40px rgba(0,0,0,0.06); }
+        .input-field { background: #FAFAF7; border: 1px solid rgba(29,29,27,0.1); color: #1d1d1b; transition: all 0.3s; }
+        .input-field:focus { border-color: #8B5E3C; box-shadow: 0 0 0 3px rgba(139,94,60,0.1); outline: none; }
+        .input-field::placeholder { color: #9a8d82; }
+        .btn-gradient { background: linear-gradient(135deg, #8B5E3C, #C4956A); transition: all 0.3s; }
+        .btn-gradient:hover { box-shadow: 0 4px 20px rgba(139,94,60,0.3); transform: translateY(-1px); }
         .fade-in { animation: fadeInUp 0.6s ease-out both; }
         @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center px-4">
 
-<div class="w-full max-w-md glass-card rounded-2xl p-8 fade-in" style="box-shadow: 0 8px 40px rgba(0,0,0,0.4);">
+<div class="w-full max-w-md auth-card rounded-2xl p-8 fade-in">
 
     <div class="text-center mb-8">
         <div class="text-4xl mb-2">🔒</div>
-        <h1 class="text-2xl font-bold text-slate-100">Reset Password</h1>
-        <p class="text-slate-400 mt-1.5 text-sm">Enter your new password below</p>
+        <h1 class="text-2xl font-bold" style="color: #1d1d1b;">Reset Password</h1>
+        <p class="mt-1.5 text-sm" style="color: #9a8d82;">Enter your new password below</p>
     </div>
 
     <c:if test="${not empty errorMessage}">
-        <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-4 text-sm">
-            ❌ ${errorMessage}
-        </div>
+        <div style="background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.12); color: #dc2626;"
+             class="px-4 py-3 rounded-xl mb-4 text-sm">❌ ${errorMessage}</div>
     </c:if>
 
     <form action="/reset-password" method="post" class="space-y-5">
         <input type="hidden" name="token" value="${token}" />
         <div>
-            <label class="block text-sm font-medium text-slate-300 mb-1.5">New Password</label>
+            <label class="block text-sm font-medium mb-1.5" style="color: #3d3530;">New Password</label>
             <input type="password" name="newPassword" required placeholder="••••••••"
-                   class="w-full input-dark rounded-xl px-4 py-3 text-sm"/>
-            <p class="text-xs text-slate-500 mt-1.5">Must be at least 6 characters.</p>
+                   class="w-full input-field rounded-xl px-4 py-3 text-sm"/>
+            <p class="text-xs mt-1.5" style="color: #9a8d82;">Must be at least 6 characters.</p>
         </div>
         <button type="submit" class="w-full btn-gradient text-white font-semibold py-3 rounded-xl text-sm">
             Update Password
