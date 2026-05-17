@@ -112,6 +112,39 @@ public class NotificationService {
         smsNotificationService.sendSms(user.getPhone(), smsMessage);
     }
 
+    public void sendSpecialRequestCreated(User user, String requestDetails) {
+        String emailMessage = "Dear " + user.getFullName() + ",\n\nYour special request: '" + requestDetails
+                + "' has been successfully submitted and is PENDING review.\n\nThank you,\nReserveSmart Team";
+        String smsMessage = "ReserveSmart: Your special request: '" + requestDetails + "' has been submitted.";
+        saveSystemNotification(user, emailMessage);
+        emailNotificationService.saveEmailNotification(user, emailMessage);
+        emailNotificationService.sendEmail(user.getEmail(), "Special Request Submitted — ReserveSmart", emailMessage);
+        smsNotificationService.saveSmsNotification(user, smsMessage);
+        smsNotificationService.sendSms(user.getPhone(), smsMessage);
+    }
+
+    public void sendSpecialRequestAccepted(User user, String requestDetails) {
+        String emailMessage = "Dear " + user.getFullName() + ",\n\nGood news! Your special request: '" + requestDetails
+                + "' has been ACCEPTED.\n\nThank you,\nReserveSmart Team";
+        String smsMessage = "ReserveSmart: Your special request: '" + requestDetails + "' has been ACCEPTED.";
+        saveSystemNotification(user, emailMessage);
+        emailNotificationService.saveEmailNotification(user, emailMessage);
+        emailNotificationService.sendEmail(user.getEmail(), "Special Request Accepted — ReserveSmart", emailMessage);
+        smsNotificationService.saveSmsNotification(user, smsMessage);
+        smsNotificationService.sendSms(user.getPhone(), smsMessage);
+    }
+
+    public void sendSpecialRequestRejected(User user, String requestDetails) {
+        String emailMessage = "Dear " + user.getFullName() + ",\n\nWe regret to inform you that your special request: '" + requestDetails
+                + "' has been REJECTED. Please contact us for more details.\n\nThank you,\nReserveSmart Team";
+        String smsMessage = "ReserveSmart: Your special request: '" + requestDetails + "' has been REJECTED.";
+        saveSystemNotification(user, emailMessage);
+        emailNotificationService.saveEmailNotification(user, emailMessage);
+        emailNotificationService.sendEmail(user.getEmail(), "Special Request Rejected — ReserveSmart", emailMessage);
+        smsNotificationService.saveSmsNotification(user, smsMessage);
+        smsNotificationService.sendSms(user.getPhone(), smsMessage);
+    }
+
     // READ
 
     public List<Notification> getUserNotifications(Long userId) {

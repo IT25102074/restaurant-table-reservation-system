@@ -6,6 +6,7 @@ import com.reservesmart.model.SpecialRequestModel;
 import com.reservesmart.dto.SpecialRequestDTO;
 import com.reservesmart.repository.ReservationRepository;
 import com.reservesmart.repository.SpecialRequestRepository;
+import com.reservesmart.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class SpecialRequestService {
 
     private final SpecialRequestRepository specialRequestRepository;
     private final ReservationRepository reservationRepository;
+    private final NotificationService notificationService;
 
     public SpecialRequestResponseDTO submitResponse(SpecialRequestDTO request) {
 
@@ -36,6 +38,9 @@ public class SpecialRequestService {
 
         // SR -> db
         SpecialRequestModel saved = specialRequestRepository.save(SR);
+        
+        notificationService.sendSpecialRequestCreated(reservation.getUser(), request.getRequest());
+        
         return mapToResponse(saved);
     }
 
@@ -75,6 +80,10 @@ public class SpecialRequestService {
                 .orElseThrow(() -> new RuntimeException("Special request not found with id: " + id));
         request.setStatus("ACCEPTED");
         specialRequestRepository.save(request);
+
+        Reservation reservation = reservationRepository.findById(request.getReservationId())
+                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+        notificationService.sendSpecialRequestAccepted(reservation.getUser(), request.getRequest());
     }
 
     public void rejectRequest(Long id) {
@@ -82,6 +91,10 @@ public class SpecialRequestService {
                 .orElseThrow(() -> new RuntimeException("Special request not found with id: " + id));
         request.setStatus("REJECTED");
         specialRequestRepository.save(request);
+
+        Reservation reservation = reservationRepository.findById(request.getReservationId())
+                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+        notificationService.sendSpecialRequestRejected(reservation.getUser(), request.getRequest());
     }
 
     //mapping logic hiding (abstraction)
