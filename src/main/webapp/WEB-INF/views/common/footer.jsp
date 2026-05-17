@@ -2,19 +2,19 @@
 
 </main>
 
-<footer class="border-t border-white/5 mt-16">
+<footer style="border-top: 1px solid rgba(29,29,27,0.06); margin-top: 4rem;">
     <div class="max-w-6xl mx-auto px-6 py-8">
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
-                <p class="font-bold text-lg bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-                    🍽️ ReserveSmart
+                <p class="font-hearty text-lg" style="color: var(--accent);">
+                    Flor
                 </p>
-                <p class="text-xs text-slate-500 mt-0.5">
-                    Restaurant Table Reservation System
+                <p class="text-xs mt-0.5" style="color: var(--text-muted);">
+                    Authentic Sri Lankan Dining Experience
                 </p>
             </div>
-            <div class="flex gap-6 text-xs text-slate-500">
-                <span>&copy; 2026 ReserveSmart</span>
+            <div class="flex gap-6 text-xs" style="color: var(--text-muted);">
+                <span>&copy; 2026 Flor</span>
             </div>
         </div>
     </div>

@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".paragraph.banner-full").forEach(e=>{const t=e.querySelectorAll(".layout__picture .field-image");if(t.length>0){const e=Math.floor(Math.random()*t.length);t.forEach((t,n)=>{n!==e&&(t.style.display="none")})}})});

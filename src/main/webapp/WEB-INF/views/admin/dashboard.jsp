@@ -2,115 +2,226 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="../common/header.jsp" %>
 
-<div class="max-w-6xl mx-auto px-4 py-10 fade-in">
+<style>
+    .dash-stat-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid rgba(29,29,27,0.07);
+        box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        transition: all 0.25s ease;
+    }
+    .dash-stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+    }
+    .dash-stat-icon {
+        width: 48px; height: 48px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.3rem; margin-bottom: 0.85rem;
+    }
+    .dash-stat-value {
+        font-size: 2rem; font-weight: 800; line-height: 1;
+        letter-spacing: -0.02em;
+    }
+    .dash-stat-label {
+        font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+        letter-spacing: 0.07em; color: #9a8d82; margin-top: 0.3rem;
+    }
+    .dash-stat-sub {
+        font-size: 0.72rem; color: #b0a59a; margin-top: 0.25rem;
+    }
+    .dash-action-card {
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid rgba(29,29,27,0.07);
+        padding: 1.25rem 1rem;
+        text-align: center;
+        text-decoration: none;
+        display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+        transition: all 0.25s ease;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .dash-action-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(139,94,60,0.1);
+        border-color: rgba(139,94,60,0.2);
+    }
+    .dash-action-icon {
+        width: 44px; height: 44px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.3rem;
+    }
+    .dash-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    .dash-table thead tr { border-bottom: 1px solid rgba(29,29,27,0.07); }
+    .dash-table thead th {
+        padding: 0.75rem 1rem; text-align: left;
+        font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.08em; color: #9a8d82;
+    }
+    .dash-table tbody tr {
+        border-bottom: 1px solid rgba(29,29,27,0.05);
+        transition: background 0.2s;
+    }
+    .dash-table tbody tr:hover { background: rgba(139,94,60,0.03); }
+    .dash-table td { padding: 0.75rem 1rem; color: #3d3530; }
+    .badge {
+        display: inline-block; padding: 0.2rem 0.65rem;
+        border-radius: 99px; font-size: 0.65rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .badge-pending  { background: rgba(202,138,4,0.1);  color: #ca8a04; }
+    .badge-confirmed{ background: rgba(22,163,74,0.1);  color: #16a34a; }
+    .badge-cancelled{ background: rgba(220,38,38,0.08); color: #dc2626; }
+    .badge-completed{ background: rgba(37,99,235,0.08); color: #2563eb; }
+    .section-card {
+        background: #fff; border-radius: 16px;
+        border: 1px solid rgba(29,29,27,0.07);
+        box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        overflow: hidden;
+    }
+    .section-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid rgba(29,29,27,0.07);
+        display: flex; justify-content: space-between; align-items: center;
+    }
+    .section-header h3 { font-size: 0.95rem; font-weight: 700; color: #1d1d1b; }
+    .section-header a { font-size: 0.78rem; font-weight: 600; color: #8B5E3C; text-decoration: none; }
+    .section-header a:hover { opacity: 0.7; }
+    .empty-state { text-align: center; padding: 2.5rem 1rem; color: #9a8d82; font-size: 0.875rem; }
+    .feedback-row { padding: 0.85rem 1.25rem; border-bottom: 1px solid rgba(29,29,27,0.05); }
+    .feedback-row:last-child { border-bottom: none; }
+    .page-header {
+        background: #fff; border-radius: 16px;
+        border: 1px solid rgba(29,29,27,0.07);
+        padding: 1.75rem 2rem; margin-bottom: 1.75rem;
+        display: flex; justify-content: space-between; align-items: center;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+</style>
 
-    <!-- Welcome Banner -->
-    <div class="glass rounded-2xl p-8 mb-8 relative overflow-hidden" style="border-left: 3px solid #64748b;">
-        <h2 class="text-2xl font-bold text-slate-100">Admin Dashboard</h2>
-        <p class="text-slate-400 mt-1 text-sm">Welcome, ${sessionScope.userName}. Full system overview below.</p>
+<div class="max-w-6xl mx-auto px-4 py-8 fade-in">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <p style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#9a8d82; margin-bottom:0.25rem;">ReserveSmart</p>
+            <h1 style="font-size:1.6rem; font-weight:800; color:#1d1d1b; letter-spacing:-0.02em;">Admin Dashboard</h1>
+            <p style="font-size:0.875rem; color:#6b5e54; margin-top:0.25rem;">Welcome back, <strong>${sessionScope.userName}</strong> — here's your system overview.</p>
+        </div>
+        <div style="text-align:right;">
+            <div style="font-size:0.78rem; color:#9a8d82;">Today</div>
+            <div style="font-size:0.95rem; font-weight:700; color:#1d1d1b;">
+                <jsp:useBean id="now" class="java.util.Date" />
+                <c:out value="${now}" />
+            </div>
+        </div>
     </div>
 
-    <!-- STATS ROW 1 -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
-        <div class="glass rounded-2xl p-5 text-center glow-amber-hover transition-all duration-300">
-            <div class="text-3xl font-bold text-amber-400">${stats.totalUsers}</div>
-            <div class="text-xs text-slate-500 mt-1">Total Users</div>
-            <div class="text-xs text-slate-600 mt-0.5">${stats.totalCustomers} customers · ${stats.totalAdmins} admins</div>
+    <!-- Top Stats Row -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
+        <div class="dash-stat-card">
+            <div class="dash-stat-icon" style="background:rgba(139,94,60,0.1);">👥</div>
+            <div class="dash-stat-value" style="color:#8B5E3C;">${stats.totalUsers}</div>
+            <div class="dash-stat-label">Total Users</div>
+            <div class="dash-stat-sub">${stats.totalCustomers} customers · ${stats.totalAdmins} admins</div>
         </div>
-        <div class="glass rounded-2xl p-5 text-center card-hover">
-            <div class="text-3xl font-bold text-blue-400">${stats.totalTables}</div>
-            <div class="text-xs text-slate-500 mt-1">Total Tables</div>
-            <div class="text-xs text-slate-600 mt-0.5">${stats.availableTables} available · ${stats.reservedTables} reserved</div>
+        <div class="dash-stat-card">
+            <div class="dash-stat-icon" style="background:rgba(37,99,235,0.08);">🪑</div>
+            <div class="dash-stat-value" style="color:#2563eb;">${stats.totalTables}</div>
+            <div class="dash-stat-label">Total Tables</div>
+            <div class="dash-stat-sub">${stats.availableTables} available · ${stats.reservedTables} reserved</div>
         </div>
-        <div class="glass rounded-2xl p-5 text-center card-hover">
-            <div class="text-3xl font-bold text-green-400">${stats.totalReservations}</div>
-            <div class="text-xs text-slate-500 mt-1">Total Reservations</div>
-            <div class="text-xs text-slate-600 mt-0.5">${stats.pendingCount} pending · ${stats.confirmedCount} confirmed</div>
+        <div class="dash-stat-card">
+            <div class="dash-stat-icon" style="background:rgba(22,163,74,0.08);">📅</div>
+            <div class="dash-stat-value" style="color:#16a34a;">${stats.totalReservations}</div>
+            <div class="dash-stat-label">Reservations</div>
+            <div class="dash-stat-sub">${stats.pendingCount} pending · ${stats.confirmedCount} confirmed</div>
         </div>
-        <div class="glass rounded-2xl p-5 text-center card-hover">
-            <div class="text-3xl font-bold text-yellow-400">${stats.avgRating}</div>
-            <div class="text-xs text-slate-500 mt-1">Avg Feedback Rating</div>
-            <div class="text-xs text-slate-600 mt-0.5">from ${stats.totalFeedback} reviews</div>
-        </div>
-    </div>
-
-    <!-- STATS ROW 2 -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
-        <div class="glass rounded-2xl p-4 text-center" style="border: 1px solid rgba(234,179,8,0.15);">
-            <div class="text-2xl font-bold text-yellow-400">${stats.pendingCount}</div>
-            <div class="text-xs text-yellow-500/70 mt-1">Pending</div>
-        </div>
-        <div class="glass rounded-2xl p-4 text-center" style="border: 1px solid rgba(34,197,94,0.15);">
-            <div class="text-2xl font-bold text-green-400">${stats.confirmedCount}</div>
-            <div class="text-xs text-green-500/70 mt-1">Confirmed</div>
-        </div>
-        <div class="glass rounded-2xl p-4 text-center" style="border: 1px solid rgba(239,68,68,0.15);">
-            <div class="text-2xl font-bold text-red-400">${stats.cancelledCount}</div>
-            <div class="text-xs text-red-500/70 mt-1">Cancelled</div>
-        </div>
-        <div class="glass rounded-2xl p-4 text-center">
-            <div class="text-2xl font-bold text-slate-400">${stats.completedCount}</div>
-            <div class="text-xs text-slate-500 mt-1">Completed</div>
+        <div class="dash-stat-card">
+            <div class="dash-stat-icon" style="background:rgba(202,138,4,0.08);">⭐</div>
+            <div class="dash-stat-value" style="color:#ca8a04;">${stats.avgRating}</div>
+            <div class="dash-stat-label">Avg Rating</div>
+            <div class="dash-stat-sub">from ${stats.totalFeedback} reviews</div>
         </div>
     </div>
 
-    <!-- QUICK MANAGEMENT -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-10">
-        <a href="/admin/users" class="glass rounded-2xl p-5 text-center card-hover cursor-pointer">
-            <div class="text-3xl mb-2">👥</div>
-            <div class="text-sm font-semibold text-slate-300">Manage Users</div>
+    <!-- Reservation Status Row -->
+    <div class="grid grid-cols-4 gap-4 mb-7">
+        <div class="dash-stat-card" style="border-left:3px solid #ca8a04; padding:1rem 1.25rem;">
+            <div class="dash-stat-value" style="color:#ca8a04; font-size:1.6rem;">${stats.pendingCount}</div>
+            <div class="dash-stat-label" style="color:rgba(202,138,4,0.75);">Pending</div>
+        </div>
+        <div class="dash-stat-card" style="border-left:3px solid #16a34a; padding:1rem 1.25rem;">
+            <div class="dash-stat-value" style="color:#16a34a; font-size:1.6rem;">${stats.confirmedCount}</div>
+            <div class="dash-stat-label" style="color:rgba(22,163,74,0.75);">Confirmed</div>
+        </div>
+        <div class="dash-stat-card" style="border-left:3px solid #dc2626; padding:1rem 1.25rem;">
+            <div class="dash-stat-value" style="color:#dc2626; font-size:1.6rem;">${stats.cancelledCount}</div>
+            <div class="dash-stat-label" style="color:rgba(220,38,38,0.75);">Cancelled</div>
+        </div>
+        <div class="dash-stat-card" style="border-left:3px solid #2563eb; padding:1rem 1.25rem;">
+            <div class="dash-stat-value" style="color:#2563eb; font-size:1.6rem;">${stats.completedCount}</div>
+            <div class="dash-stat-label" style="color:rgba(37,99,235,0.75);">Completed</div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-7">
+        <a href="/admin/users" class="dash-action-card">
+            <div class="dash-action-icon" style="background:rgba(139,94,60,0.08);">👥</div>
+            <span style="font-size:0.8rem; font-weight:700; color:#1d1d1b;">Users</span>
         </a>
-        <a href="/admin/tables" class="glass rounded-2xl p-5 text-center card-hover cursor-pointer">
-            <div class="text-3xl mb-2">🪑</div>
-            <div class="text-sm font-semibold text-slate-300">Manage Tables</div>
+        <a href="/admin/tables" class="dash-action-card">
+            <div class="dash-action-icon" style="background:rgba(37,99,235,0.08);">🪑</div>
+            <span style="font-size:0.8rem; font-weight:700; color:#1d1d1b;">Tables</span>
         </a>
-        <a href="/reservations/admin/list" class="glass rounded-2xl p-5 text-center card-hover cursor-pointer">
-            <div class="text-3xl mb-2">📅</div>
-            <div class="text-sm font-semibold text-slate-300">Reservations</div>
+        <a href="/reservations/admin/list" class="dash-action-card">
+            <div class="dash-action-icon" style="background:rgba(22,163,74,0.08);">📅</div>
+            <span style="font-size:0.8rem; font-weight:700; color:#1d1d1b;">Reservations</span>
         </a>
-        <a href="/admin/special-requests" class="glass rounded-2xl p-5 text-center card-hover cursor-pointer">
-            <div class="text-3xl mb-2">✨</div>
-            <div class="text-sm font-semibold text-slate-300">Special Requests</div>
+        <a href="/admin/special-requests" class="dash-action-card">
+            <div class="dash-action-icon" style="background:rgba(139,94,60,0.08);">✨</div>
+            <span style="font-size:0.8rem; font-weight:700; color:#1d1d1b;">Special Requests</span>
         </a>
-        <a href="/feedback/admin/list" class="glass rounded-2xl p-5 text-center card-hover cursor-pointer">
-            <div class="text-3xl mb-2">⭐</div>
-            <div class="text-sm font-semibold text-slate-300">Feedback</div>
+        <a href="/feedback/admin/list" class="dash-action-card">
+            <div class="dash-action-icon" style="background:rgba(202,138,4,0.08);">⭐</div>
+            <span style="font-size:0.8rem; font-weight:700; color:#1d1d1b;">Feedback</span>
         </a>
     </div>
 
-    <!-- RECENT DATA -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Tables Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
         <!-- Recent Reservations -->
-        <div class="glass rounded-2xl overflow-hidden">
-            <div class="px-6 py-4 border-b border-white/5 flex justify-between items-center">
-                <h3 class="font-semibold text-slate-200">Recent Reservations</h3>
-                <a href="/reservations/admin/list" class="text-xs text-amber-400 hover:text-amber-300 transition">View All</a>
+        <div class="section-card">
+            <div class="section-header">
+                <h3>Recent Reservations</h3>
+                <a href="/reservations/admin/list">View All →</a>
             </div>
             <c:choose>
                 <c:when test="${empty recentReservations}">
-                    <div class="text-center py-8 text-slate-500 text-sm">No reservations yet.</div>
+                    <div class="empty-state">📭 No reservations yet.</div>
                 </c:when>
                 <c:otherwise>
-                    <table class="w-full text-sm table-dark">
+                    <table class="dash-table">
                         <thead>
-                            <tr class="text-slate-500 text-xs uppercase">
-                                <th class="px-4 py-2.5 text-left">Customer</th>
-                                <th class="px-4 py-2.5 text-left">Table</th>
-                                <th class="px-4 py-2.5 text-left">Status</th>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Table</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach var="r" items="${recentReservations}">
-                                <tr class="border-t border-white/5">
-                                    <td class="px-4 py-2.5 text-slate-300">${r.user.fullName}</td>
-                                    <td class="px-4 py-2.5 text-slate-400">${r.table.tableNumber}</td>
-                                    <td class="px-4 py-2.5">
-                                        <span class="text-xs px-2 py-0.5 rounded-full
-                                            ${r.status == 'PENDING'   ? 'bg-yellow-500/15 text-yellow-400' :
-                                              r.status == 'CONFIRMED' ? 'bg-green-500/15 text-green-400'  :
-                                              r.status == 'CANCELLED' ? 'bg-red-500/15 text-red-400'      :
-                                                                         'bg-slate-500/15 text-slate-400'}">
+                                <tr>
+                                    <td style="font-weight:600; color:#1d1d1b;">${r.user.fullName}</td>
+                                    <td style="color:#6b5e54;">#${r.table.tableNumber}</td>
+                                    <td>
+                                        <span class="badge
+                                            ${r.status == 'PENDING'   ? 'badge-pending'   :
+                                              r.status == 'CONFIRMED' ? 'badge-confirmed' :
+                                              r.status == 'CANCELLED' ? 'badge-cancelled' : 'badge-completed'}">
                                             ${r.status}
                                         </span>
                                     </td>
@@ -123,29 +234,27 @@
         </div>
 
         <!-- Recent Feedback -->
-        <div class="glass rounded-2xl overflow-hidden">
-            <div class="px-6 py-4 border-b border-white/5 flex justify-between items-center">
-                <h3 class="font-semibold text-slate-200">Recent Feedback</h3>
-                <a href="/feedback/admin/list" class="text-xs text-amber-400 hover:text-amber-300 transition">View All</a>
+        <div class="section-card">
+            <div class="section-header">
+                <h3>Recent Feedback</h3>
+                <a href="/feedback/admin/list">View All →</a>
             </div>
             <c:choose>
                 <c:when test="${empty recentFeedback}">
-                    <div class="text-center py-8 text-slate-500 text-sm">No feedback yet.</div>
+                    <div class="empty-state">📭 No feedback yet.</div>
                 </c:when>
                 <c:otherwise>
-                    <div class="divide-y divide-white/5">
-                        <c:forEach var="f" items="${recentFeedback}">
-                            <div class="px-4 py-3">
-                                <div class="flex justify-between items-start">
-                                    <span class="text-sm font-medium text-slate-300">${f.user.fullName}</span>
-                                    <span class="text-xs text-slate-500">
-                                        <c:forEach begin="1" end="${f.rating}" var="s">⭐</c:forEach>
-                                    </span>
-                                </div>
-                                <p class="text-xs text-slate-500 mt-0.5 line-clamp-1">${f.message}</p>
+                    <c:forEach var="f" items="${recentFeedback}">
+                        <div class="feedback-row">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.25rem;">
+                                <span style="font-size:0.875rem; font-weight:700; color:#1d1d1b;">${f.user.fullName}</span>
+                                <span style="font-size:0.8rem;">
+                                    <c:forEach begin="1" end="${f.rating}" var="s">⭐</c:forEach>
+                                </span>
                             </div>
-                        </c:forEach>
-                    </div>
+                            <p style="font-size:0.78rem; color:#9a8d82; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;">${f.message}</p>
+                        </div>
+                    </c:forEach>
                 </c:otherwise>
             </c:choose>
         </div>
