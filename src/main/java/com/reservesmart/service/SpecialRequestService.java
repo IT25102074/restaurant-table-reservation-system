@@ -30,7 +30,7 @@ public class SpecialRequestService {
             throw new RuntimeException("Reservation cancelled");
         }
 
-        //create obj - SR
+        //create obj - SR....
         SpecialRequestModel SR = new SpecialRequestModel();
         SR.setReservationId(request.getReservationId());
         SR.setCustomerID(reservation.getUser().getUserId());  // customerID from request
