@@ -54,9 +54,11 @@
         .auth-card h1 {
             font-size: 1.75rem; font-weight: 800; color: #1d1d1b;
             letter-spacing: -0.02em; margin-bottom: 0.4rem;
+            text-align: center;
         }
         .auth-card .subtitle {
             font-size: 0.875rem; color: #9a8d82; margin-bottom: 2rem; line-height: 1.5;
+            text-align: center;
         }
 
         /* Section label */
@@ -233,7 +235,7 @@
         <div class="field-group">
             <label for="emailOrPhone">Email or Phone Number</label>
             <input type="text" id="emailOrPhone" name="emailOrPhone" required
-                   placeholder="you@example.com or 0771234567" autocomplete="username">
+                   placeholder="user@example.com or 0771234567" autocomplete="username">
         </div>
 
         <div class="field-group">
