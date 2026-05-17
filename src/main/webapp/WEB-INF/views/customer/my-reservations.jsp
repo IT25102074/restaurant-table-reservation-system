@@ -20,32 +20,44 @@
     </c:if>
 
     <!-- Status Filter Tabs -->
-    <c:if test="${not empty reservations}">
-        <div class="flex gap-2 mb-6 flex-wrap">
-            <a href="/reservations/my"
-               class="text-sm px-4 py-1.5 rounded-full border transition
-                      ${empty param.status
-                          ? 'border-amber-500/30 text-amber-400 bg-amber-500/20'
-                          : 'border-white/10 text-slate-400 hover:bg-white/5'}">All</a>
-            <a href="/reservations/my?status=PENDING"
-               class="text-sm px-4 py-1.5 rounded-full border transition
-                      ${param.status == 'PENDING'
-                          ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
-                          : 'border-white/10 text-slate-400 hover:bg-white/5'}">Pending</a>
-            <a href="/reservations/my?status=CONFIRMED"
-               class="text-sm px-4 py-1.5 rounded-full border transition
-                      ${param.status == 'CONFIRMED'
-                          ? 'bg-green-500/20 text-green-400 border-green-500/30'
-                          : 'border-white/10 text-slate-400 hover:bg-white/5'}">Confirmed</a>
-            <a href="/reservations/my?status=CANCELLED"
-               class="text-sm px-4 py-1.5 rounded-full border transition
-                      ${param.status == 'CANCELLED'
-                          ? 'bg-red-500/20 text-red-400 border-red-500/30'
-                          : 'border-white/10 text-slate-400 hover:bg-white/5'}">Cancelled</a>
-        </div>
-    </c:if>
+    <div class="flex gap-2 mb-6 flex-wrap">
+        <a href="/reservations/my"
+           class="text-sm px-4 py-1.5 rounded-full border transition
+                  ${empty filterStatus
+                      ? 'border-amber-500/30 text-amber-400 bg-amber-500/20'
+                      : 'border-white/10 text-slate-400 hover:bg-white/5'}">All</a>
+        <a href="/reservations/my?status=PENDING"
+           class="text-sm px-4 py-1.5 rounded-full border transition
+                  ${filterStatus == 'PENDING'
+                      ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+                      : 'border-white/10 text-slate-400 hover:bg-white/5'}">Pending</a>
+        <a href="/reservations/my?status=CONFIRMED"
+           class="text-sm px-4 py-1.5 rounded-full border transition
+                  ${filterStatus == 'CONFIRMED'
+                      ? 'bg-green-500/20 text-green-400 border-green-500/30'
+                      : 'border-white/10 text-slate-400 hover:bg-white/5'}">Confirmed</a>
+        <a href="/reservations/my?status=CANCELLED"
+           class="text-sm px-4 py-1.5 rounded-full border transition
+                  ${filterStatus == 'CANCELLED'
+                      ? 'bg-red-500/20 text-red-400 border-red-500/30'
+                      : 'border-white/10 text-slate-400 hover:bg-white/5'}">Cancelled</a>
+        <a href="/reservations/my?status=COMPLETED"
+           class="text-sm px-4 py-1.5 rounded-full border transition
+                  ${filterStatus == 'COMPLETED'
+                      ? 'bg-blue-500/20 text-blue-400 border-blue-500/30'
+                      : 'border-white/10 text-slate-400 hover:bg-white/5'}">Completed</a>
+    </div>
 
     <c:choose>
+        <c:when test="${empty reservations && not empty filterStatus}">
+            <div class="glass rounded-2xl text-center py-16" style="color: var(--text-muted);">
+                <div class="text-5xl mb-3">🔍</div>
+                <p class="mb-2 font-medium" style="color: var(--text-primary);">No ${filterStatus} reservations found.</p>
+                <p class="text-sm mb-5">You don't have any reservations with this status.</p>
+                <a href="/reservations/my" class="text-sm font-semibold px-5 py-2 rounded-xl transition"
+                   style="background:rgba(139,94,60,0.08);color:var(--accent);border:1px solid rgba(139,94,60,0.15);">View All Reservations</a>
+            </div>
+        </c:when>
         <c:when test="${empty reservations}">
             <div class="glass rounded-2xl text-center py-20" style="color: var(--text-muted);">
                 <div class="text-5xl mb-3">📅</div>
@@ -59,42 +71,40 @@
         <c:otherwise>
             <div class="space-y-4">
                 <c:forEach var="r" items="${reservations}">
-                    <c:if test="${empty param.status || param.status == r.status}">
-                        <div class="glass rounded-2xl p-6 card-hover">
-                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                                <div>
-                                    <div class="flex items-center gap-3 mb-2">
-                                        <h3 class="font-bold" style="color: var(--text-primary);">Table ${r.table.tableNumber}</h3>
-                                        <span class="text-xs px-2.5 py-0.5 rounded-full font-medium
-                                            ${r.status == 'PENDING'   ? 'bg-yellow-500/15 text-yellow-400 border border-yellow-500/20' :
-                                              r.status == 'CONFIRMED' ? 'bg-green-500/15 text-green-400 border border-green-500/20'  :
-                                              r.status == 'CANCELLED' ? 'bg-red-500/15 text-red-400 border border-red-500/20'      :
-                                                                         'bg-slate-500/15 text-slate-400 border border-slate-500/20'}">
-                                            ${r.status}
-                                        </span>
-                                    </div>
-                                    <div class="text-sm space-y-0.5" style="color: var(--text-secondary);">
-                                        <p>📅 <strong style="color: var(--text-primary);">${r.reservationDate}</strong>
-                                           &nbsp;🕐 <strong style="color: var(--text-primary);">${r.reservationTime}</strong></p>
-                                        <p>👥 ${r.guestCount} guests &nbsp;📍 ${r.table.location}</p>
-                                    </div>
+                    <div class="glass rounded-2xl p-6 card-hover">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="font-bold" style="color: var(--text-primary);">Table ${r.table.tableNumber}</h3>
+                                    <span class="text-xs px-2.5 py-0.5 rounded-full font-medium
+                                        ${r.status == 'PENDING'   ? 'bg-yellow-500/15 text-yellow-400 border border-yellow-500/20' :
+                                          r.status == 'CONFIRMED' ? 'bg-green-500/15 text-green-400 border border-green-500/20'  :
+                                          r.status == 'CANCELLED' ? 'bg-red-500/15 text-red-400 border border-red-500/20'      :
+                                                                     'bg-slate-500/15 text-slate-400 border border-slate-500/20'}">
+                                        ${r.status}
+                                    </span>
                                 </div>
-                                <div class="flex gap-2 flex-shrink-0">
-                                    <c:if test="${r.status != 'CANCELLED' && r.status != 'COMPLETED'}">
-                                        <a href="/reservations/edit/${r.reservationId}"
-                                           class="text-sm bg-blue-500/15 text-blue-400 px-4 py-2 rounded-xl
-                                                  hover:bg-blue-500/25 transition font-medium border border-blue-500/20">Edit</a>
-                                        <form action="/reservations/cancel/${r.reservationId}" method="post"
-                                              onsubmit="return confirm('Cancel this reservation?')">
-                                            <button type="submit"
-                                                    class="text-sm bg-red-500/15 text-red-400 px-4 py-2 rounded-xl
-                                                           hover:bg-red-500/25 transition font-medium border border-red-500/20">Cancel</button>
-                                        </form>
-                                    </c:if>
+                                <div class="text-sm space-y-0.5" style="color: var(--text-secondary);">
+                                    <p>📅 <strong style="color: var(--text-primary);">${r.reservationDate}</strong>
+                                       &nbsp;🕐 <strong style="color: var(--text-primary);">${r.reservationTime}</strong></p>
+                                    <p>👥 ${r.guestCount} guests &nbsp;📍 ${r.table.location}</p>
                                 </div>
                             </div>
+                            <div class="flex gap-2 flex-shrink-0">
+                                <c:if test="${r.status != 'CANCELLED' && r.status != 'COMPLETED'}">
+                                    <a href="/reservations/edit/${r.reservationId}"
+                                       class="text-sm bg-blue-500/15 text-blue-400 px-4 py-2 rounded-xl
+                                              hover:bg-blue-500/25 transition font-medium border border-blue-500/20">Edit</a>
+                                    <form action="/reservations/cancel/${r.reservationId}" method="post"
+                                          onsubmit="return confirm('Cancel this reservation?')">
+                                        <button type="submit"
+                                                class="text-sm bg-red-500/15 text-red-400 px-4 py-2 rounded-xl
+                                                       hover:bg-red-500/25 transition font-medium border border-red-500/20">Cancel</button>
+                                    </form>
+                                </c:if>
+                            </div>
                         </div>
-                    </c:if>
+                    </div>
                 </c:forEach>
             </div>
         </c:otherwise>

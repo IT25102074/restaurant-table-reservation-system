@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="../common/header.jsp" %>
 
 <div class="max-w-6xl mx-auto px-4 py-10 fade-in">
@@ -32,7 +33,7 @@
     <div class="glass rounded-2xl overflow-hidden">
         <div class="px-6 py-4 flex justify-between" style="border-bottom:1px solid var(--border-light);">
             <h3 class="font-semibold" style="color:var(--text-primary);">Reservations</h3>
-            <span class="text-xs" style="color:var(--text-muted);">${reservations.size()} found</span>
+            <span class="text-xs" style="color:var(--text-muted);">${fn:length(reservations)} found</span>
         </div>
         <c:choose>
             <c:when test="${empty reservations}"><div class="text-center py-16" style="color:var(--text-muted);"><div class="text-4xl mb-3">📅</div><p>No reservations found.</p></div></c:when>

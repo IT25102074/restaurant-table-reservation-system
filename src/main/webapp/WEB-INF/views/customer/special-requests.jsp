@@ -16,11 +16,15 @@
             <div>
                 <label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Select Reservation</label>
                 <select id="reservationId" required class="w-full input-dark rounded-xl px-4 py-3">
-                    <option value="" disabled selected>-- Choose an upcoming reservation --</option>
-                    <c:forEach var="res" items="${reservations}">
-                        <option value="${res.reservationId}">Table ${res.table.tableNumber} - ${res.reservationDate} at ${res.reservationTime}</option>
-                    </c:forEach>
-                </select>
+                <option value="" disabled selected>-- Choose an upcoming reservation --</option>
+                <c:forEach var="res" items="${reservations}">
+                    <c:if test="${res.status == 'PENDING' || res.status == 'CONFIRMED'}">
+                        <option value="${res.reservationId}">
+                            Table ${res.table.tableNumber} — ${res.reservationDate} at ${res.reservationTime} (${res.status})
+                        </option>
+                    </c:if>
+                </c:forEach>
+            </select>
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Your Request</label>
@@ -64,8 +68,11 @@
                     <div class="glass rounded-2xl p-6 card-hover" id="req-card-${req.id}">
                         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                             <div>
-                                <h4 class="font-bold mb-2" style="color:var(--text-primary);">Request #${req.id} (Reservation: ${req.reservationId}) ${statusBadge}</h4>
-                                <div class="p-3 rounded-lg text-sm" style="background:rgba(139,94,60,0.03);border:1px solid var(--border-light);color:var(--text-primary);">"${req.response}"</div>
+                                <h4 class="font-bold mb-2" style="color:var(--text-primary);">Request #${req.id} (Reservation #${req.reservationId}) ${statusBadge}</h4>
+                                <div class="p-3 rounded-lg text-sm" style="background:rgba(139,94,60,0.03);border:1px solid var(--border-light);color:var(--text-primary);">
+                                    <span style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#9a8d82;">Your Request</span><br/>
+                                    "${req.response != null ? req.response : '(no text saved)'}"
+                                </div>
                                 <p class="text-xs mt-2" style="color:var(--text-muted);">Submitted: ${dateStr}</p>
                             </div>
                             <div class="flex gap-2 flex-shrink-0 mt-3 sm:mt-0">
@@ -79,11 +86,27 @@
 
     async function submitRequest(event) {
         event.preventDefault();
-        const payload = { reservationId: parseInt(document.getElementById('reservationId').value), CustomerName: document.getElementById('customerName').value, Request: document.getElementById('requestText').value };
+        const payload = {
+            reservationId: parseInt(document.getElementById('reservationId').value),
+            CustomerName: document.getElementById('customerName').value,
+            Request: document.getElementById('requestText').value
+        };
         try {
-            const response = await fetch('/api/SpecialRequest', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            if (response.ok) { alert("Special Request submitted successfully!"); document.getElementById('requestText').value = ''; loadRequests(); }
-            else { alert("Failed to submit request."); }
+            const response = await fetch('/api/SpecialRequest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify(payload)
+            });
+            if (response.ok) {
+                document.getElementById('requestText').value = '';
+                loadRequests();
+                const btn = document.querySelector('#specialRequestForm button[type=submit]');
+                btn.textContent = '✅ Submitted!';
+                setTimeout(() => btn.textContent = 'Submit Request', 2500);
+            } else {
+                alert("Failed to submit request. Please try again.");
+            }
         } catch (error) { console.error("Error:", error); alert("Error submitting request."); }
     }
 

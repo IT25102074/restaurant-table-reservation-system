@@ -37,7 +37,7 @@
 
                 <div>
                     <label class="block text-sm font-medium mb-1.5" style="color: var(--text-primary);">Date</label>
-                    <input type="date" name="reservationDate" required min="${java.time.LocalDate.now()}"
+                    <input type="date" name="reservationDate" required min="${today}"
                            class="w-full input-dark rounded-xl px-4 py-3 text-sm"/>
                 </div>
 

@@ -79,7 +79,10 @@
                                     <c:if test="${f.rating >= 4}">
                                         <span class="ml-auto text-xs bg-green-500/15 text-green-400 px-2 py-0.5 rounded-full border border-green-500/20">Positive</span>
                                     </c:if>
-                                    <c:if test="${f.rating < 4}">
+                                    <c:if test="${f.rating == 3}">
+                                        <span class="ml-auto text-xs bg-yellow-500/15 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-500/20">Neutral</span>
+                                    </c:if>
+                                    <c:if test="${f.rating < 3}">
                                         <span class="ml-auto text-xs bg-red-500/15 text-red-400 px-2 py-0.5 rounded-full border border-red-500/20">Complaint</span>
                                     </c:if>
                                 </div>

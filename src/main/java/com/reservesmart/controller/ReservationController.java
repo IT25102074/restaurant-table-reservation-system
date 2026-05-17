@@ -47,6 +47,7 @@ public class ReservationController {
         model.addAttribute("tables", availableTables);
         model.addAttribute("preSelectedTableId", tableId);
         model.addAttribute("preSelectedGuests", guests);
+        model.addAttribute("today", java.time.LocalDate.now().toString()); // Bug #16 fix
         return "customer/reservation-form";
     }
 
@@ -83,17 +84,27 @@ public class ReservationController {
     }
 
     /**
-     * View my reservations.
+     * View my reservations — with optional status filter.
      */
     @GetMapping("/my")
-    public String myReservations(HttpSession session, Model model) {
+    public String myReservations(@RequestParam(required = false) String status,
+                                 HttpSession session, Model model) {
         User loggedIn = (User) session.getAttribute("loggedInUser");
         if (loggedIn == null || !"CUSTOMER".equals(loggedIn.getRole())) {
             return "redirect:/login";
         }
 
         List<Reservation> reservations = reservationService.getMyReservations(loggedIn.getUserId());
+
+        // Apply status filter server-side
+        if (status != null && !status.trim().isEmpty()) {
+            reservations = reservations.stream()
+                    .filter(r -> r.getStatus().equals(status))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
         model.addAttribute("reservations", reservations);
+        model.addAttribute("filterStatus", status);
         return "customer/my-reservations";
     }
 
@@ -127,6 +138,7 @@ public class ReservationController {
 
             model.addAttribute("reservation", reservation);
             model.addAttribute("tables", tableService.getAvailableTables());
+            model.addAttribute("today", java.time.LocalDate.now().toString());
             return "customer/reservation-form";
 
         } catch (IllegalArgumentException e) {
