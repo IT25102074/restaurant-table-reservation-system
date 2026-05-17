@@ -34,11 +34,14 @@ public class NotificationService {
 
     public void sendRegistrationWelcome(User user) {
         String message = "Welcome to ReserveSmart! Your account has been created successfully.";
+        String smsMessage = "Welcome to ReserveSmart! Your account is created.";
 
         saveSystemNotification(user, message);
         emailNotificationService.saveEmailNotification(user, message);
         emailNotificationService.sendEmail(user.getEmail(),
                 "Welcome to ReserveSmart!", message);
+        smsNotificationService.saveSmsNotification(user, smsMessage);
+        smsNotificationService.sendSms(user.getPhone(), smsMessage);
     }
 
     public void sendPasswordResetEmail(User user, String resetLink) {

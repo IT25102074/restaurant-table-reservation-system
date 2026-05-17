@@ -60,6 +60,13 @@
             <p class="text-xs text-slate-500 mt-1">Update your details</p>
         </a>
 
+        <a href="/customer/special-requests"
+           class="glass rounded-2xl p-6 text-center group card-hover cursor-pointer">
+            <div class="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">✨</div>
+            <h3 class="font-semibold text-slate-200 text-sm">Special Requests</h3>
+            <p class="text-xs text-slate-500 mt-1">Make a custom request</p>
+        </a>
+
     </div>
 
     <!-- Quick Tip -->

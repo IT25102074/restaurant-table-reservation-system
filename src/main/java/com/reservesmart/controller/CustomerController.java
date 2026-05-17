@@ -7,12 +7,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Customer controller — stub for Phase 3.
- * Full implementation in Phase 5.
+ * Customer controller
+ * 
  */
 @Controller
 @RequestMapping("/customer")
 public class CustomerController {
+
+    @org.springframework.beans.factory.annotation.Autowired
+    private com.reservesmart.service.ReservationService reservationService;
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
@@ -25,5 +28,22 @@ public class CustomerController {
 
         model.addAttribute("user", loggedIn);
         return "customer/dashboard";
+    }
+
+    @GetMapping("/special-requests")
+    public String viewSpecialRequests(HttpSession session, Model model) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null || !"CUSTOMER".equals(loggedIn.getRole())) {
+            return "redirect:/login";
+        }
+
+        java.util.List<com.reservesmart.model.Reservation> myReservations = reservationService
+                .getMyReservations(loggedIn.getUserId())
+                .stream()
+                .filter(r -> !r.isCancelled())
+                .collect(java.util.stream.Collectors.toList());
+
+        model.addAttribute("reservations", myReservations);
+        return "customer/special-requests";
     }
 }

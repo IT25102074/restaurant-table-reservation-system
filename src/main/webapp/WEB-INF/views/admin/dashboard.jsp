@@ -55,7 +55,7 @@
     </div>
 
     <!-- QUICK MANAGEMENT -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-10">
         <a href="/admin/users" class="glass rounded-2xl p-5 text-center card-hover cursor-pointer">
             <div class="text-3xl mb-2">👥</div>
             <div class="text-sm font-semibold text-slate-300">Manage Users</div>
@@ -67,6 +67,10 @@
         <a href="/reservations/admin/list" class="glass rounded-2xl p-5 text-center card-hover cursor-pointer">
             <div class="text-3xl mb-2">📅</div>
             <div class="text-sm font-semibold text-slate-300">Reservations</div>
+        </a>
+        <a href="/admin/special-requests" class="glass rounded-2xl p-5 text-center card-hover cursor-pointer">
+            <div class="text-3xl mb-2">✨</div>
+            <div class="text-sm font-semibold text-slate-300">Special Requests</div>
         </a>
         <a href="/feedback/admin/list" class="glass rounded-2xl p-5 text-center card-hover cursor-pointer">
             <div class="text-3xl mb-2">⭐</div>

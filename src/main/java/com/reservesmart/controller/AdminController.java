@@ -107,4 +107,12 @@ public class AdminController {
 
         return "redirect:/admin/users";
     }
+
+    @GetMapping("/special-requests")
+    public String viewSpecialRequests(HttpSession session) {
+        if (!isAdmin(session))
+            return "redirect:/login";
+
+        return "admin/special-requests";
+    }
 }
