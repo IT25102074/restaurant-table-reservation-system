@@ -1,116 +1,170 @@
 package com.reservesmart.controller;
 
 import com.reservesmart.model.Feedback;
+import com.reservesmart.model.User;
 import com.reservesmart.service.FeedbackService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/feedback")
 public class FeedbackController {
-    private final FeedbackService feedbackService;
 
-    public FeedbackController(FeedbackService feedbackService) {
-        this.feedbackService = feedbackService;
-    }
+    @Autowired
+    private FeedbackService feedbackService;
 
-    private Long getSessionUserId(HttpSession session) {
-        Object userId = session.getAttribute("loggedInUser");
-        if (userId instanceof Long id) {
-            return id;
-        }
-        if (userId instanceof Integer id) {
-            return id.longValue();
-        }
-        return null;
-    }
 
-    private boolean isAdmin(HttpSession session) {
-        Object role = session.getAttribute("userRole");
-        return role != null && "ADMIN".equalsIgnoreCase(role.toString());
-    }
+    // CUSTOMER ROUTES
 
-    @PostMapping("/create")
-    public ResponseEntity<String> createFeedback(@RequestBody Feedback feedback, HttpSession session) {
-        Long sessionUserId = getSessionUserId(session);
-        if (sessionUserId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first");
-        }
-
-        String returnMessage = feedbackService.createFeedback(sessionUserId, feedback.getContent());
-        return ResponseEntity.ok(returnMessage);
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Feedback>> getAllFeedbacks(HttpSession session) {
-        if (!isAdmin(session)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-        List<Feedback> feedbackList = feedbackService.getAllFeedbacks();
-        return ResponseEntity.ok(feedbackList);
-    }
-
+    /**
+     * Customer: view own feedback + submit form on same page.
+     */
     @GetMapping("/my")
-    public ResponseEntity<List<Feedback>> getMyFeedbacks(
-            @RequestParam(required = false) Long userId,
-            @RequestParam(required = false) String keyword,
-            HttpSession session) {
-        Long sessionUserId = getSessionUserId(session);
-        if (sessionUserId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public String myFeedback(HttpSession session, Model model) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null || !"CUSTOMER".equals(loggedIn.getRole())) {
+            return "redirect:/login";
         }
 
-        Long effectiveUserId = sessionUserId;
-        if (isAdmin(session) && userId != null) {
-            effectiveUserId = userId;
-        }
-
-        List<Feedback> feedbackList = feedbackService.getFeedbacksByUserId(effectiveUserId, keyword);
-        return ResponseEntity.ok(feedbackList);
+        List<Feedback> feedbackList =
+                feedbackService.getMyFeedback(loggedIn.getUserId());
+        model.addAttribute("feedbackList", feedbackList);
+        return "customer/feedback";
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<String> updateFeedback(@RequestBody Feedback feedback, HttpSession session) {
-        Long sessionUserId = getSessionUserId(session);
-        if (sessionUserId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first");
+    /**
+     * Customer: submit new feedback.
+     */
+    @PostMapping("/submit")
+    public String submitFeedback(@RequestParam String message,
+                                 @RequestParam int rating,
+                                 HttpSession session,
+                                 RedirectAttributes redirectAttributes) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null || !"CUSTOMER".equals(loggedIn.getRole())) {
+            return "redirect:/login";
         }
 
         try {
-            String returnMessage = isAdmin(session)
-                    ? feedbackService.updateFeedback(feedback)
-                    : feedbackService.updateFeedbackForUser(sessionUserId, feedback);
-            return ResponseEntity.ok(returnMessage);
-        } catch (SecurityException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            feedbackService.submitFeedback(loggedIn.getUserId(), message, rating);
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Thank you! Your feedback has been submitted.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
+
+        return "redirect:/feedback/my";
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteFeedback(@PathVariable Long id, HttpSession session) {
-        Long sessionUserId = getSessionUserId(session);
-        if (sessionUserId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first");
+    /**
+     * Customer: load edit form (pre-fills the form on the same page).
+     */
+    @GetMapping("/edit/{id}")
+    public String editFeedbackForm(@PathVariable Long id,
+                                   HttpSession session, Model model,
+                                   RedirectAttributes redirectAttributes) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null || !"CUSTOMER".equals(loggedIn.getRole())) {
+            return "redirect:/login";
         }
 
         try {
-            String returnMessage = isAdmin(session)
-                    ? feedbackService.deleteFeedback(id)
-                    : feedbackService.deleteFeedbackForUser(id, sessionUserId);
-            return ResponseEntity.ok(returnMessage);
-        } catch (SecurityException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            Feedback feedback = feedbackService.getFeedbackById(id);
+
+            if (!feedback.getUser().getUserId().equals(loggedIn.getUserId())) {
+                redirectAttributes.addFlashAttribute("errorMessage",
+                        "You can only edit your own feedback.");
+                return "redirect:/feedback/my";
+            }
+
+            List<Feedback> feedbackList =
+                    feedbackService.getMyFeedback(loggedIn.getUserId());
+
+            model.addAttribute("feedbackList", feedbackList);
+            model.addAttribute("editFeedback", feedback);
+            return "customer/feedback";
+
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/feedback/my";
         }
+    }
+
+    /**
+     * Customer: submit feedback update.
+     */
+    @PostMapping("/update/{id}")
+    public String updateFeedback(@PathVariable Long id,
+                                 @RequestParam String message,
+                                 @RequestParam int rating,
+                                 HttpSession session,
+                                 RedirectAttributes redirectAttributes) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null || !"CUSTOMER".equals(loggedIn.getRole())) {
+            return "redirect:/login";
+        }
+
+        try {
+            feedbackService.updateFeedback(id, loggedIn.getUserId(), message, rating);
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Feedback updated successfully.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/feedback/my";
+    }
+
+    /**
+     * Customer: delete own feedback.
+     */
+    @PostMapping("/delete/{id}")
+    public String deleteFeedback(@PathVariable Long id,
+                                 HttpSession session,
+                                 RedirectAttributes redirectAttributes) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null) return "redirect:/login";
+
+        try {
+            feedbackService.deleteFeedback(id, loggedIn.getUserId(),
+                    loggedIn.getRole());
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Feedback deleted.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        // Redirect based on role
+        if ("ADMIN".equals(loggedIn.getRole())) {
+            return "redirect:/feedback/admin/list";
+        }
+        return "redirect:/feedback/my";
+    }
+
+
+    // ADMIN ROUTES
+
+
+    /**
+     * Admin: view all feedback with rating filter.
+     */
+    @GetMapping("/admin/list")
+    public String adminFeedback(@RequestParam(required = false) Integer rating,
+                                HttpSession session, Model model) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null || !"ADMIN".equals(loggedIn.getRole())) {
+            return "redirect:/login";
+        }
+
+        List<Feedback> feedbackList = feedbackService.filterByRating(rating);
+        model.addAttribute("feedbackList", feedbackList);
+        model.addAttribute("filterRating", rating);
+        return "admin/feedback";
     }
 }

@@ -19,7 +19,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // ─── View Profile ─────────────────────────────────────────────────────────
+    //  View Profile
 
     @GetMapping
     public String viewProfile(HttpSession session, Model model,
@@ -37,10 +37,11 @@ public class UserController {
         }
     }
 
-    // ─── Update Profile ───────────────────────────────────────────────────────
+    // Update Profile
 
     @PostMapping("/update")
     public String updateProfile(@RequestParam String fullName,
+                                @RequestParam String email,
                                 @RequestParam String phone,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) {
@@ -48,7 +49,7 @@ public class UserController {
         if (loggedIn == null) return "redirect:/login";
 
         try {
-            User updated = userService.updateProfile(loggedIn.getUserId(), fullName, phone);
+            User updated = userService.updateProfile(loggedIn.getUserId(), fullName, email, phone);
 
             // Refresh session with updated user
             session.setAttribute("loggedInUser", updated);
@@ -62,7 +63,7 @@ public class UserController {
         return "redirect:/profile";
     }
 
-    // ─── Delete Account ───────────────────────────────────────────────────────
+    //Delete Account
 
     @PostMapping("/delete")
     public String deleteAccount(HttpSession session,
