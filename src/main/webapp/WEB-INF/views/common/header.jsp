@@ -151,6 +151,7 @@
             <a href="/customer/dashboard" class="nav-link-modern text-sm font-medium">Dashboard</a>
             <a href="/reservations/new" class="nav-link-modern text-sm font-medium">Book Table</a>
             <a href="/reservations/my" class="nav-link-modern text-sm font-medium">My Reservations</a>
+            <a href="/customer/special-requests" class="nav-link-modern text-sm font-medium">Special Requests</a>
             <a href="/feedback/my" class="nav-link-modern text-sm font-medium">Feedback</a>
 
             <!-- Notification bell -->
@@ -174,6 +175,7 @@
             <a href="/admin/users" class="nav-link-modern text-sm font-medium">Users</a>
             <a href="/admin/tables" class="nav-link-modern text-sm font-medium">Tables</a>
             <a href="/reservations/admin/list" class="nav-link-modern text-sm font-medium">Reservations</a>
+            <a href="/admin/special-requests" class="nav-link-modern text-sm font-medium">Special Requests</a>
             <a href="/feedback/admin/list" class="nav-link-modern text-sm font-medium">Feedback</a>
         </c:if>
 
