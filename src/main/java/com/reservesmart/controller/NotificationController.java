@@ -10,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 import java.util.List;
 
 @Controller
@@ -93,5 +96,20 @@ public class NotificationController {
         notificationService.deleteAllNotifications(loggedIn.getUserId());
         redirectAttributes.addFlashAttribute("successMessage", "All notifications cleared.");
         return "redirect:/customer/notifications";
+    }
+
+    @ControllerAdvice
+    public static class GlobalNotificationAdvice {
+        @Autowired
+        private NotificationService notificationService;
+
+        @ModelAttribute
+        public void populateUnreadCount(HttpSession session) {
+            User loggedInUser = (User) session.getAttribute("loggedInUser");
+            if (loggedInUser != null) {
+                long unreadCount = notificationService.countUnread(loggedInUser.getUserId());
+                session.setAttribute("unreadCount", unreadCount);
+            }
+        }
     }
 }

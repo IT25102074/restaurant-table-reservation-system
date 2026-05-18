@@ -60,11 +60,6 @@ public class UserService {
                     "Password must be at least 6 characters.");
         }
 
-        // Validate phone number
-        if (phone != null && !phone.matches("\\d{10,15}")) {
-            throw new IllegalArgumentException(
-                    "Phone number must be 10-15 digits.");
-        }
 
         // OOP: POLYMORPHISM — Customer is subclass of User
         Customer customer = new Customer(fullName, email, password, phone);
@@ -135,10 +130,6 @@ public class UserService {
             }
         }
 
-        if (phone != null && !phone.matches("\\d{10,15}")) {
-            throw new IllegalArgumentException(
-                    "Phone number must be 10-15 digits.");
-        }
 
         // OOP: method from abstract User class
         user.updateProfile(fullName, email, phone);

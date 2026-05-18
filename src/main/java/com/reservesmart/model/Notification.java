@@ -3,6 +3,7 @@ package com.reservesmart.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 
 /**
@@ -28,6 +29,7 @@ public abstract class Notification {
     // OOP: ASSOCIATION — Notification belongs to one User
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @Column(name = "message", nullable = false)
